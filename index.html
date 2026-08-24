@@ -1,0 +1,1758 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แดชบอร์ดวิเคราะห์อุทกภัยประเทศไทย (พ.ศ. 2558–2568) & ฉากทัศน์คาดการณ์ปี 2569</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Leaflet CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Kanit', 'Inter', sans-serif;
+            background-color: #0b1329;
+            color: #f8fafc;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 4px;
+        }
+        .leaflet-popup-content-wrapper {
+            background: #1e293b;
+            color: #f8fafc;
+            border-radius: 0.75rem;
+            border: 1px solid #334155;
+        }
+        .leaflet-popup-tip {
+            background: #1e293b;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Header Navigation -->
+    <header class="bg-slate-900/95 border-b border-slate-800 sticky top-0 z-50 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-blue-600/20 p-2.5 rounded-xl border border-blue-500/30 text-blue-400">
+                    <i class="fa-solid fa-water-ladders text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-400 via-cyan-300 to-teal-400 bg-clip-text text-transparent">
+                        แดชบอร์ดวิเคราะห์อุทกภัยประเทศไทย (2558–2568) & ฉากทัศน์ 2569
+                    </h1>
+                    <p class="text-xs text-slate-400">ระบบสารสนเทศภูมิศาสตร์เชิงพื้นที่ เจาะลึกประวัติท่วมซ้ำซากรายจังหวัดย้อนหลัง 11 ปี</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <button onclick="scrollToSection('forecast-section')" class="px-3.5 py-1.5 bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-500/40 text-xs font-medium rounded-lg transition flex items-center gap-2">
+                    <i class="fa-solid fa-crystal-ball"></i> คาดการณ์ปี 2569
+                </button>
+                <button onclick="resetFilters()" class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium rounded-lg transition shadow-lg shadow-blue-900/40 flex items-center gap-2">
+                    <i class="fa-solid fa-rotate-left"></i> รีเซ็ตตัวกรอง
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+        <!-- Quick Access: Hotspot Provinces Bar -->
+        <section class="bg-slate-800/90 border border-rose-500/30 rounded-2xl p-4 shadow-xl">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                <div class="flex items-center gap-2 text-rose-400 font-bold text-xs uppercase tracking-wide">
+                    <i class="fa-solid fa-fire text-sm animate-pulse"></i> ทางด่วนเจาะลึกจังหวัดท่วมซ้ำซาก (Top Hotspots):
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="openProvinceModal('เชียงใหม่')" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/40 rounded-lg text-xs font-medium transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-location-dot"></i> เชียงใหม่ (3 ครั้ง)
+                    </button>
+                    <button onclick="openProvinceModal('พระนครศรีอยุธยา')" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/40 rounded-lg text-xs font-medium transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-location-dot"></i> อยุธยา (4 ครั้ง)
+                    </button>
+                    <button onclick="openProvinceModal('สงขลา')" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/40 rounded-lg text-xs font-medium transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-location-dot"></i> สงขลา / หาดใหญ่ (3 ครั้ง)
+                    </button>
+                    <button onclick="openProvinceModal('อุบลราชธานี')" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/40 rounded-lg text-xs font-medium transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-location-dot"></i> อุบลราชธานี (3 ครั้ง)
+                    </button>
+                    <button onclick="openProvinceModal('นครศรีธรรมราช')" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/40 rounded-lg text-xs font-medium transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-location-dot"></i> นครศรีธรรมราช (3 ครั้ง)
+                    </button>
+                    <button onclick="openProvinceModal('สุโขทัย')" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/40 rounded-lg text-xs font-medium transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-location-dot"></i> สุโขทัย (3 ครั้ง)
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Multi-Filter Section -->
+        <section class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-4 shadow-xl">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3 pb-2 border-b border-slate-700/50">
+                <div class="text-slate-300 font-semibold text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-cyan-400"></i> ตัวกรองสืบค้นมิติต่างๆ (Comprehensive Multi-Filter)
+                </div>
+                <div class="flex items-center gap-2 bg-slate-900/80 px-3 py-1 rounded-lg border border-slate-700">
+                    <input type="checkbox" id="filter-hotspot" onchange="applyFilters()" class="w-4 h-4 text-rose-600 bg-slate-800 border-slate-600 rounded focus:ring-rose-500 cursor-pointer">
+                    <label for="filter-hotspot" class="text-xs text-rose-300 font-medium cursor-pointer flex items-center gap-1.5">
+                        <i class="fa-solid fa-rotate text-rose-400"></i> แสดงเฉพาะ "พื้นที่ท่วมซ้ำซาก"
+                    </label>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+                <!-- Year -->
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">ช่วงปี พ.ศ. (2558-2568)</label>
+                    <select id="filter-year" onchange="applyFilters()" class="w-full bg-slate-900 border border-slate-700 rounded-lg text-xs text-slate-200 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <option value="ALL">ทุกปี (2558 - 2568)</option>
+                        <option value="2568">2568 (สงขลา / อยุธยา / นครศรีฯ)</option>
+                        <option value="2567">2567 (เชียงราย / เชียงใหม่ / น่าน / สุโขทัย / หนองคาย)</option>
+                        <option value="2566">2566 (นราธิวาส / ปราจีนบุรี / ลำปาง)</option>
+                        <option value="2565">2565 (เชียงใหม่ / อุบลฯ / อยุธยา / นนทบุรี / ขอนแก่น / กทม.)</option>
+                        <option value="2564">2564 (สุโขทัย / ชัยภูมิ / โคราช)</option>
+                        <option value="2563">2563 (นครศรีธรรมราช / สุราษฎร์ฯ / ปากช่อง)</option>
+                        <option value="2562">2562 (อุบลฯ / ร้อยเอ็ด / พิษณุโลก-บางระกำ)</option>
+                        <option value="2561">2561 (เพชรบุรี / น่าน / ตราด)</option>
+                        <option value="2560">2560 (สกลนคร / นครสวรรค์ / สุโขทัย / นครศรีฯ)</option>
+                        <option value="2559">2559 (เชียงใหม่ / ระยอง / กทม.)</option>
+                        <option value="2558">2558 (ตาก-แม่สอด / พิจิตร-สามง่าม)</option>
+                    </select>
+                </div>
+
+                <!-- Region -->
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">ภูมิภาค (Region)</label>
+                    <select id="filter-region" onchange="applyFilters()" class="w-full bg-slate-900 border border-slate-700 rounded-lg text-xs text-slate-200 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <option value="ALL">ทุกภูมิภาค (สมดุลทั่วประเทศ)</option>
+                        <option value="NORTH">ภาคเหนือ</option>
+                        <option value="NORTHEAST">ภาคตะวันออกเฉียงเหนือ</option>
+                        <option value="CENTRAL">ภาคกลาง / กทม. และปริมณฑล</option>
+                        <option value="SOUTH">ภาคใต้</option>
+                        <option value="EAST">ภาคตะวันออก</option>
+                        <option value="WEST">ภาคตะวันตก</option>
+                    </select>
+                </div>
+
+                <!-- Severity -->
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">ระดับความรุนแรง</label>
+                    <select id="filter-severity" onchange="applyFilters()" class="w-full bg-slate-900 border border-slate-700 rounded-lg text-xs text-slate-200 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <option value="ALL">ทุกระดับความรุนแรง</option>
+                        <option value="CRITICAL">วิกฤติต่างระดับ (Critical)</option>
+                        <option value="HIGH">รุนแรงมาก (High)</option>
+                        <option value="MEDIUM">ปานกลาง (Medium)</option>
+                    </select>
+                </div>
+
+                <!-- Flood Type -->
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">ประเภทอุทกภัย</label>
+                    <select id="filter-type" onchange="applyFilters()" class="w-full bg-slate-900 border border-slate-700 rounded-lg text-xs text-slate-200 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <option value="ALL">ทุกประเภทอุทกภัย</option>
+                        <option value="FLASH">น้ำป่าไหลหลาก / ดินโคลนถล่ม</option>
+                        <option value="RIVER">น้ำเอ่อล้นตลิ่ง (ลุ่มน้ำหลัก)</option>
+                        <option value="URBAN">น้ำท่วมขังเมืองรอการระบาย</option>
+                        <option value="COASTAL">น้ำทะเลหนุนสูง / ชายฝั่ง</option>
+                    </select>
+                </div>
+
+                <!-- Search -->
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">ค้นหาพื้นที่/ตำบล/อำเภอ</label>
+                    <div class="relative">
+                        <input type="text" id="filter-search" oninput="applyFilters()" placeholder="เช่น เชียงใหม่, หาดใหญ่, บางบาล..." class="w-full bg-slate-900 border border-slate-700 rounded-lg text-xs text-slate-200 pl-8 pr-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-500 text-xs"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- KPI Metrics Overview -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-slate-800/90 border border-slate-700/60 rounded-xl p-4 flex items-center justify-between shadow-lg">
+                <div>
+                    <p class="text-xs text-slate-400 font-medium">มูลค่าความเสียหายสะสม</p>
+                    <h2 id="kpi-damage" class="text-2xl font-bold text-rose-400 mt-1">0 <span class="text-xs text-slate-400 font-normal">ล้านบาท</span></h2>
+                    <p class="text-[11px] text-slate-400 mt-1"><i class="fa-solid fa-chart-line text-rose-400"></i> ประเมินโดย ปภ. / สทนช.</p>
+                </div>
+                <div class="w-12 h-12 rounded-lg bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400 text-xl">
+                    <i class="fa-solid fa-house-crack"></i>
+                </div>
+            </div>
+
+            <div class="bg-slate-800/90 border border-slate-700/60 rounded-xl p-4 flex items-center justify-between shadow-lg">
+                <div>
+                    <p class="text-xs text-slate-400 font-medium">ครัวเรือนได้รับผลกระทบ</p>
+                    <h2 id="kpi-households" class="text-2xl font-bold text-blue-400 mt-1">0 <span class="text-xs text-slate-400 font-normal">ครัวเรือน</span></h2>
+                    <p class="text-[11px] text-slate-400 mt-1"><i class="fa-solid fa-users text-blue-400"></i> รวมพื้นที่เมืองและเกษตร</p>
+                </div>
+                <div class="w-12 h-12 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 text-xl">
+                    <i class="fa-solid fa-people-roof"></i>
+                </div>
+            </div>
+
+            <div class="bg-slate-800/90 border border-slate-700/60 rounded-xl p-4 flex items-center justify-between shadow-lg">
+                <div>
+                    <p class="text-xs text-slate-400 font-medium">งบประมาณช่วยเหลือ/เยียวยา</p>
+                    <h2 id="kpi-budget" class="text-2xl font-bold text-emerald-400 mt-1">0 <span class="text-xs text-slate-400 font-normal">ล้านบาท</span></h2>
+                    <p class="text-[11px] text-slate-400 mt-1"><i class="fa-solid fa-hand-holding-dollar text-emerald-400"></i> งบกลาง & กองทุนเยียวยา</p>
+                </div>
+                <div class="w-12 h-12 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 text-xl">
+                    <i class="fa-solid fa-sack-dollar"></i>
+                </div>
+            </div>
+
+            <div class="bg-slate-800/90 border border-slate-700/60 rounded-xl p-4 flex items-center justify-between shadow-lg">
+                <div>
+                    <p class="text-xs text-slate-400 font-medium">จุดเหตุการณ์บันทึก (ท่วมซ้ำซาก)</p>
+                    <h2 id="kpi-incidents" class="text-2xl font-bold text-amber-400 mt-1">0 <span class="text-xs text-slate-400 font-normal">พื้นที่</span></h2>
+                    <p id="kpi-hotspot-sub" class="text-[11px] text-rose-300 mt-1"><i class="fa-solid fa-fire text-rose-400"></i> ท่วมซ้ำซาก 0 พื้นที่</p>
+                </div>
+                <div class="w-12 h-12 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 text-xl">
+                    <i class="fa-solid fa-map-pin"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- GIS Map & Analytical Charts -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- GIS Map (7 Cols) -->
+            <div class="lg:col-span-7 bg-slate-800/80 border border-slate-700/60 rounded-2xl p-4 shadow-xl flex flex-col">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-sm font-semibold text-slate-200 flex items-center gap-2">
+                        <i class="fa-solid fa-map-location-dot text-cyan-400"></i> แผนที่สารสนเทศภูมิศาสตร์กระจายตัวอุทกภัย (GIS Map)
+                    </h3>
+                    <span class="text-[11px] text-slate-400 bg-slate-900 px-2.5 py-1 rounded border border-slate-700">
+                        <i class="fa-solid fa-circle text-rose-500 text-[8px] mr-1"></i> วิกฤต
+                        <i class="fa-solid fa-circle text-amber-500 text-[8px] mx-1"></i> รุนแรง
+                        <i class="fa-solid fa-circle text-blue-400 text-[8px] mx-1"></i> ปานกลาง
+                    </span>
+                </div>
+                <div id="map" class="w-full h-[430px] rounded-xl border border-slate-700/80"></div>
+                <p class="text-[11px] text-slate-400 mt-2 italic">
+                    * คลิกที่หมุดบนแผนที่เพื่อดูรายละเอียด หรือกดปุ่ม "เจาะลึกประวัติท่วมซ้ำซาก" เพื่อดูสถิติย้อนหลังทุกปีของจังหวัดนั้น
+                </p>
+            </div>
+
+            <!-- Analytics Charts (5 Cols) -->
+            <div class="lg:col-span-5 flex flex-col gap-6">
+                <!-- Trend Line Chart -->
+                <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-4 shadow-xl flex-1 flex flex-col">
+                    <h3 class="text-sm font-semibold text-slate-200 mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-column text-blue-400"></i> แนวโน้มความเสียหายสะสมภาพรวม (2558-2568)
+                    </h3>
+                    <div class="flex-1 min-h-[170px] relative">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Regional Balance Doughnut -->
+                <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-4 shadow-xl flex-1 flex flex-col">
+                    <h3 class="text-sm font-semibold text-slate-200 mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-pie text-cyan-400"></i> สัดส่วนมูลค่าความเสียหายจำแนกตามภูมิภาค
+                    </h3>
+                    <div class="flex-1 min-h-[170px] relative">
+                        <canvas id="regionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Detailed Event Data Table -->
+        <section class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-5 shadow-xl space-y-4">
+            <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2 pb-3 border-b border-slate-700">
+                <div>
+                    <h3 class="text-base font-bold text-slate-100 flex items-center gap-2">
+                        <i class="fa-solid fa-table text-amber-400"></i> ฐานข้อมูลเหตุการณ์อุทกภัยเชิงพื้นที่ย้อนหลังและปัจจุบัน (2558–2568)
+                    </h3>
+                    <p class="text-xs text-slate-400">เจาะลึกระดับ จังหวัด / อำเภอ / ตำบล ปัญหาสาเหตุ และทางด่วนดูประวัติการท่วมซ้ำซาก</p>
+                </div>
+                <div class="text-xs text-slate-400">
+                    พบทั้งหมด <span id="table-count" class="font-bold text-cyan-400">0</span> รายการ
+                </div>
+            </div>
+
+            <div class="overflow-x-auto custom-scrollbar">
+                <table class="w-full text-left text-xs border-collapse">
+                    <thead>
+                        <tr class="bg-slate-900 text-slate-300 border-b border-slate-700 uppercase tracking-wider">
+                            <th class="p-3">ปี พ.ศ.</th>
+                            <th class="p-3">จังหวัด / อำเภอ</th>
+                            <th class="p-3">ประเภทอุทกภัย</th>
+                            <th class="p-3">สถานะพื้นที่</th>
+                            <th class="p-3">ระดับน้ำสูงสุด</th>
+                            <th class="p-3">ความเสียหาย (ล้านบาท)</th>
+                            <th class="p-3">หน่วยงานหลักเข้าช่วยเหลือ</th>
+                            <th class="p-3 text-center">การดำเนินการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="incident-table-body" class="divide-y divide-slate-700/60 text-slate-300">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 2569 Forecast & Scenario Planning Section -->
+        <section id="forecast-section" class="bg-slate-800/80 border border-amber-500/40 rounded-2xl p-6 shadow-xl space-y-5 relative overflow-hidden">
+            <div class="absolute -right-12 -bottom-12 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <div class="border-b border-slate-700 pb-3 flex flex-col sm:flex-row justify-between sm:items-center gap-3">
+                <div class="flex items-center gap-3">
+                    <div class="bg-amber-500/20 p-2.5 rounded-xl border border-amber-500/30 text-amber-400">
+                        <i class="fa-solid fa-chart-line-up text-xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-100">ฉากทัศน์และการประเมินความเสี่ยงอุทกภัยปี พ.ศ. 2569 (2026 Risk Projection)</h2>
+                        <p class="text-xs text-slate-400">แบบจำลองวิเคราะห์ความเสี่ยงเชิงคาดการณ์อ้างอิงดัชนีสภาวะอากาศโลกและผังเมือง</p>
+                    </div>
+                </div>
+                <span class="bg-amber-500/20 text-amber-300 text-xs px-3 py-1 rounded-full border border-amber-500/30 font-semibold self-start sm:self-auto">
+                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> แบบจำลองคาดการณ์ (Predictive Model)
+                </span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-slate-900/90 border border-slate-700 rounded-xl p-4 space-y-2">
+                    <div class="text-rose-400 text-xs font-bold uppercase flex items-center justify-between">
+                        <span>ฉากทัศน์ที่ 1: วิกฤติลานีญากำลังแรง</span>
+                        <i class="fa-solid fa-cloud-showers-water"></i>
+                    </div>
+                    <h4 class="text-sm font-semibold text-slate-200">พื้นที่เสี่ยงสูง: ลุ่มน้ำเจ้าพระยาตอนล่าง & ภาคใต้ตอนล่าง</h4>
+                    <p class="text-[11px] text-slate-400 leading-relaxed">
+                        หากดัชนี ENSO เข้าสู่สภาวะ La Niña ปริมาณฝนสะสมอาจเกินค่าเฉลี่ยปกติ 20-30% เสี่ยงเกิดน้ำท่วมขังยาวนานในพื้นที่เกษตรกรรมนอกคันกั้นน้ำ อ.บางบาล, อ.เสนา และเขตปริมณฑล
+                    </p>
+                </div>
+
+                <div class="bg-slate-900/90 border border-slate-700 rounded-xl p-4 space-y-2">
+                    <div class="text-amber-400 text-xs font-bold uppercase flex items-center justify-between">
+                        <span>ฉากทัศน์ที่ 2: น้ำท่วมขังเมืองฉับพลัน (Pluvial)</span>
+                        <i class="fa-solid fa-city"></i>
+                    </div>
+                    <h4 class="text-sm font-semibold text-slate-200">พื้นที่เสี่ยงสูง: กทม., เชียงใหม่ (ช้างคลาน), ชลบุรี, หาดใหญ่</h4>
+                    <p class="text-[11px] text-slate-400 leading-relaxed">
+                        การขยายตัวของสิ่งก่อสร้างขวางทางระบายน้ำ ทำให้ฝนตกหนักเฉพาะแห่ง (Urban Rain Bomb) 超過 100 มม./ชม. อาจเกิดน้ำท่วมขังรอการระบาย กระทบเศรษฐกิจเมืองฉับพลัน
+                    </p>
+                </div>
+
+                <div class="bg-slate-900/90 border border-slate-700 rounded-xl p-4 space-y-2">
+                    <div class="text-cyan-400 text-xs font-bold uppercase flex items-center justify-between">
+                        <span>ฉากทัศน์ที่ 3: น้ำป่าหลาก & ดินโคลนถล่ม</span>
+                        <i class="fa-solid fa-hill-rockslide"></i>
+                    </div>
+                    <h4 class="text-sm font-semibold text-slate-200">พื้นที่เสี่ยงสูง: เทือกเขาภาคเหนือ (เชียงราย/น่าน) & อันดามัน</h4>
+                    <p class="text-[11px] text-slate-400 leading-relaxed">
+                        ความอุ้มน้ำของดินบนเขาดอยเริ่มลดลงเนื่องจากการใช้ประโยชน์ที่ดิน หากมีพายุหมุนทราปิกัลเข้าปะทะ 1-2 ลูก เสี่ยงต่อการเกิดโคลนถล่มซ้ำรอยปี 2567
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- NEW MODAL: Province Multi-Year Deep-Dive Inspector -->
+    <div id="provinceModal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-slate-900 border border-rose-500/40 rounded-2xl max-w-4xl w-full p-6 shadow-2xl space-y-5 max-h-[92vh] overflow-y-auto custom-scrollbar relative">
+            <button onclick="closeProvinceModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <!-- Header of Province Modal -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-700 pb-4">
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="px-2.5 py-1 rounded bg-rose-500/20 text-rose-400 border border-rose-500/30 font-bold text-xs flex items-center gap-1">
+                            <i class="fa-solid fa-fire text-xs"></i> รายงานวิเคราะห์ท่วมซ้ำซาก
+                        </span>
+                        <h2 id="prov-modal-title" class="text-xl font-bold text-slate-100">เจาะลึกประวัติอุทกภัย จ.เชียงใหม่</h2>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-1">สรุปวงรอบเหตุการณ์ ระดับน้ำสูงสุด มูลค่าความเสียหายสะสม และกลไกการเกิดรายปี</p>
+                </div>
+                <div class="bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700 text-right">
+                    <span class="text-[10px] text-slate-400 block uppercase">ความถี่เหตุการณ์ที่บันทึก</span>
+                    <strong id="prov-modal-count" class="text-rose-400 text-lg font-bold">3 ครั้ง / 11 ปี</strong>
+                </div>
+            </div>
+
+            <!-- Summary KPI Grid for this Province -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-800/80 p-3.5 rounded-xl border border-slate-700/60 text-xs">
+                <div>
+                    <span class="text-slate-400 block">ความเสียหายสะสมรวม</span>
+                    <strong id="prov-modal-total-damage" class="text-rose-400 text-base">0 ล้านบาท</strong>
+                </div>
+                <div>
+                    <span class="text-slate-400 block">ครัวเรือนได้รับผลกระทบรวม</span>
+                    <strong id="prov-modal-total-households" class="text-blue-400 text-base">0 ครัวเรือน</strong>
+                </div>
+                <div>
+                    <span class="text-slate-400 block">ระดับน้ำสูงสุดในประวัติศาสตร์</span>
+                    <strong id="prov-modal-max-water" class="text-cyan-400 text-base">0 ม.</strong>
+                </div>
+                <div>
+                    <span class="text-slate-400 block">งบเยียวยาสะสมที่ใช้</span>
+                    <strong id="prov-modal-total-budget" class="text-emerald-400 text-base">0 ล้านบาท</strong>
+                </div>
+            </div>
+
+            <!-- Province Specific Trend Chart -->
+            <div class="bg-slate-800/60 p-4 rounded-xl border border-slate-700/50">
+                <h4 class="text-xs font-bold text-slate-300 mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-chart-line text-cyan-400"></i> แนวโน้มระดับน้ำและความเสียหายรายปีของจังหวัดนี้
+                </h4>
+                <div class="h-[180px] w-full relative">
+                    <canvas id="provinceTrendChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Multi-Year Timeline Breakdown List -->
+            <div>
+                <h4 class="text-sm font-bold text-slate-200 mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-clock-rotate-left text-amber-400"></i> ลำดับเหตุการณ์อุทกภัยแยกตามรายปี (Year-by-Year Incident Matrix)
+                </h4>
+                <div id="prov-modal-timeline" class="space-y-4">
+                    <!-- Dynamic Injected Timeline Cards -->
+                </div>
+            </div>
+
+            <div class="pt-3 border-t border-slate-800 flex justify-end">
+                <button onclick="closeProvinceModal()" class="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg border border-slate-700 transition">
+                    ปิดหน้าต่างเจาะลึก
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Single Event Detailed Inspector -->
+    <div id="eventModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto custom-scrollbar relative">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
+            <div class="flex items-center gap-3">
+                <span id="modal-severity-badge" class="px-2.5 py-1 rounded-md text-xs font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30">วิกฤต</span>
+                <span id="modal-hotspot-badge" class="px-2.5 py-1 rounded-md text-xs font-bold bg-rose-600/30 text-rose-300 border border-rose-500/40 hidden">
+                    <i class="fa-solid fa-rotate"></i> พื้นที่ท่วมซ้ำซาก
+                </span>
+                <h3 id="modal-title" class="text-lg font-bold text-slate-100">รายละเอียดเหตุการณ์อุทกภัย</h3>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-800/60 p-3 rounded-xl border border-slate-700/50 text-xs">
+                <div>
+                    <span class="text-slate-400 block">ปี พ.ศ.</span>
+                    <strong id="modal-year" class="text-slate-200">2568</strong>
+                </div>
+                <div>
+                    <span class="text-slate-400 block">ระดับน้ำสูงสุด</span>
+                    <strong id="modal-water" class="text-cyan-400">2.5 เมตร</strong>
+                </div>
+                <div>
+                    <span class="text-slate-400 block">ความเสียหาย</span>
+                    <strong id="modal-damage" class="text-rose-400">4,500 ล้านบาท</strong>
+                </div>
+                <div>
+                    <span class="text-slate-400 block">งบช่วยเหลือที่ใช้</span>
+                    <strong id="modal-budget" class="text-emerald-400">1,200 ล้านบาท</strong>
+                </div>
+            </div>
+
+            <div class="space-y-3 text-xs">
+                <div>
+                    <h4 class="font-semibold text-slate-300 mb-1 flex items-center gap-1.5">
+                        <i class="fa-solid fa-circle-info text-blue-400"></i> สาเหตุและพลวัตการเกิด (Mechanism & Causes)
+                    </h4>
+                    <p id="modal-description" class="text-slate-400 bg-slate-800/40 p-3 rounded-lg border border-slate-800 leading-relaxed">
+                        --
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold text-slate-300 mb-1 flex items-center gap-1.5">
+                        <i class="fa-solid fa-house-chimney-crack text-amber-400"></i> ผลกระทบทางเศรษฐกิจและโครงสร้างพื้นฐาน
+                    </h4>
+                    <p id="modal-impact" class="text-slate-400 bg-slate-800/40 p-3 rounded-lg border border-slate-800 leading-relaxed">
+                        --
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold text-slate-300 mb-1 flex items-center gap-1.5">
+                        <i class="fa-solid fa-hands-holding-child text-emerald-400"></i> หน่วยงานบูรณาการลงพื้นที่ช่วยเหลือ
+                    </h4>
+                    <div id="modal-agencies" class="flex flex-wrap gap-1.5 pt-1">
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-2 flex justify-between items-center border-t border-slate-800">
+                <button id="modal-prov-btn" onclick="" class="px-3 py-1.5 bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 text-xs font-semibold rounded-lg transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-layer-group"></i> ดูประวัติท่วมซ้ำซากทั้งจังหวัดนี้
+                </button>
+                <button onclick="closeModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg border border-slate-700 transition">
+                    ปิดหน้าต่าง
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 border-t border-slate-800 py-4 text-center text-xs text-slate-500">
+        <p>ระบบแดชบอร์ดวิเคราะห์อุทกภัยประเทศไทย (พ.ศ. 2558–2568) และฉากทัศน์ความเสี่ยงปี 2569</p>
+        <p class="text-[10px] mt-1 text-slate-600">รวบรวมและปรับสมดุลข้อมูลอ้างอิงจาก กรมป้องกันและบรรเทาสาธารณภัย (ปภ.), สทนช., กรมชลประทาน และ GISTDA</p>
+    </footer>
+
+    <!-- JavaScript Data Logic -->
+    <script>
+        // Multi-Year Dataset (2558 - 2568) with Multiple Historical Incidents per Province
+        const floodData = [
+            // --- เชียงใหม่ (3 ครั้ง) ---
+            {
+                id: 15,
+                year: 2567,
+                province: "เชียงใหม่",
+                district: "เมืองเชียงใหม่ / สารภี / หางดง",
+                subdistrict: "ช้างคลาน, ป่าแดด, หนองผึ้ง",
+                region: "NORTH",
+                type: "RIVER",
+                typeName: "น้ำเอ่อล้นตลิ่ง (แม่น้ำปิง)",
+                isHotspot: true,
+                lat: 18.7883,
+                lng: 98.9853,
+                severity: "CRITICAL",
+                severityText: "วิกฤติต่างระดับ",
+                waterLevel: 2.5,
+                damageVal: 4800,
+                households: 42000,
+                budget: 1600,
+                cause: "แม่น้ำปิงเอ่อล้นระดับคันกั้นน้ำวิกฤติที่จุด P.1 (สะพานนวรัตน์) สูงทะลุ 5.30 เมตร ทุบสถิติประวัติศาสตร์ ปริมาณน้ำจากแม่แตงและเชียงดาวไหลทะลักย่านเศรษฐกิจช้างคลานและ อ.สารภี",
+                impact: "ย่านการค้าช้างคลาน ไนท์บาซาร์ และ อ.สารภี จมน้ำนานกว่า 1 สัปดาห์ ปางช้างแม่แตงได้รับผลกระทบหนัก",
+                agencies: ["ปภ.", "เทศบาลนครเชียงใหม่", "กองทัพบก", "กรมชลประทาน", "อบจ.เชียงใหม่"]
+            },
+            {
+                id: 152,
+                year: 2565,
+                province: "เชียงใหม่",
+                district: "เมืองเชียงใหม่ / แม่ริม",
+                subdistrict: "ช้างคลาน, ริมเหนือ",
+                region: "NORTH",
+                type: "RIVER",
+                typeName: "น้ำเอ่อล้นตลิ่ง (พายุโนรู)",
+                isHotspot: true,
+                lat: 18.8000,
+                lng: 98.9700,
+                severity: "HIGH",
+                severityText: "รุนแรงมาก",
+                waterLevel: 1.9,
+                damageVal: 2800,
+                households: 25000,
+                budget: 850,
+                cause: "อิทธิพลพายุโนรู ฝนตกหนักตอนบนลุ่มน้ำปิง เอ่อล้นระดับ P.1 สูง 4.65 เมตร ทะลักท่วมย่านไนท์บาซาร์และโรงเรียนในเขตเมือง",
+                impact: "ชุมชนริมฝั่งปิงท่วมขัง 3-4 วัน โรงเรียนและย่านการค้าปิดให้บริการชั่วคราว",
+                agencies: ["ปภ.", "เทศบาลนครเชียงใหม่", "กรมชลประทาน"]
+            },
+            {
+                id: 153,
+                year: 2559,
+                province: "เชียงใหม่",
+                district: "จอมทอง / ฮอด / แม่แจ่ม",
+                subdistrict: "บ้านหลวง, ช่างเคิ่ง",
+                region: "NORTH",
+                type: "FLASH",
+                typeName: "น้ำป่าไหลหลากฉับพลัน",
+                isHotspot: true,
+                lat: 18.5167,
+                lng: 98.6833,
+                severity: "MEDIUM",
+                severityText: "ปานกลาง",
+                waterLevel: 1.4,
+                damageVal: 1200,
+                households: 11000,
+                budget: 380,
+                cause: "ฝนตกหนักสะสมบนยอดดอยอินทนนท์ น้ำป่าไหลหลากลงสู่ลำน้ำแม่แจ่มและน้ำแม่กลาง ทะลักท่วมบ้านเรือนและพื้นที่เกษตร",
+                impact: "พื้นที่เกษตรกรรมสวนลำไยและแปลงผักเสียหาย สะพานสัญจรในหมู่บ้านถูกตัดขาด",
+                agencies: ["ปภ.", "อุทยานแห่งชาติดอยอินทนนท์", "อบต.บ้านหลวง"]
+            },
+
+            // --- พระนครศรีอยุธยา (4 ครั้ง) ---
+            {
+                id: 102,
+                year: 2568,
+                province: "พระนครศรีอยุธยา",
+                district: "บางบาล / เสนา / ผักไห่",
+                subdistrict: "หัวเวียง, บ้านแพน, ผักไห่",
+                region: "CENTRAL",
+                type: "RIVER",
+                typeName: "น้ำเอ่อล้นตลิ่ง",
+                isHotspot: true,
+                lat: 14.3532,
+                lng: 100.4285,
+                severity: "HIGH",
+                severityText: "รุนแรงมาก",
+                waterLevel: 2.1,
+                damageVal: 2900,
+                households: 28000,
+                budget: 850,
+                cause: "การระบายน้ำจากเขื่อนเจ้าพระยาพุ่งสูง 2,400 ลบ.ม./วินาที หนีน้ำเหนือ ทำให้น้ำล้นตลิ่งเข้าท่วมชุมชนนอกคันกั้นน้ำริมแม่น้ำน้อยและแม่น้ำเจ้าพระยา",
+                impact: "ชุมชนนอกคันกั้นน้ำท่วมขังยาวนานกว่า 40 วัน ประชาชนต้องย้ายขึ้นไปอาศัยบนชั้นสองและริมถนน",
+                agencies: ["ปภ.", "กรมชลประทาน", "สทนช.", "องค์กรปกครองส่วนท้องถิ่น"]
+            },
+            {
+                id: 1022,
+                year: 2565,
+                province: "พระนครศรีอยุธยา",
+                district: "บางบาล / เสนา / พระนครศรีอยุธยา",
+                subdistrict: "บางบาล, ประตูชัย",
+                region: "CENTRAL",
+                type: "RIVER",
+                typeName: "น้ำเอ่อล้นตลิ่งมหาอุทกภัย",
+                isHotspot: true,
+                lat: 14.3600,
+                lng: 100.4400,
+                severity: "CRITICAL",
+                severityText: "วิกฤติต่างระดับ",
+                waterLevel: 2.6,
+                damageVal: 4500,
+                households: 48000,
+                budget: 1500,
+                cause: "มหาอุทกภัยพายุโนรู ระบายน้ำเขื่อนเจ้าพระยาสูงทะลุ 2,800 ลบ.ม./วินาที ท่วมทุ่งรับน้ำบางบาล เสนา และโบราณสถานวัดไชยวัฒนารามต้องวางโบราณสถานเสริมคันกั้น",
+                impact: "บ้านเรือนจมน้ำนานกว่า 60 วัน พื้นที่เกษตรกรรมนอกพนังรับน้ำเสียหายสิ้นเชิง",
+                agencies: ["ปภ.", "กรมชลประทาน", "กรมศิลปากร", "กองทัพบก"]
+            },
+            {
+                id: 1023,
+                year: 2564,
+                province: "พระนครศรีอยุธยา",
+                district: "เสนา / ผักไห่",
+                subdistrict: "บ้านแพน, อมฤต",
+                region: "CENTRAL",
+                type: "RIVER",
+                typeName: "น้ำเอ่อล้นตลิ่ง (เตียนหมู่)",
+                isHotspot: true,
+                lat: 14.3400,
+                lng: 99.9800,
+                severity: "HIGH",
+                severityText: "รุนแรงมาก",
+                waterLevel: 1.8,
+                damageVal: 2100,
+                households: 22000,
+                budget: 650,
+                cause: "พายุเตียนหมู่ทำให้ปริมาณน้ำหลากเจ้าพระยาและแม่น้ำน้อยเพิ่มสูง เอ่อล้นท่วมบ้านเรือนใต้ถุนสูงริมแม่น้ำ",
+                impact: "ประชาชนใช้ชีวิตบนเรือและตั้งเพิงพักริมทางหลวงสายอยุธยา-สุพรรณบุรี",
+                agencies: ["ปภ.", "กรมชลประทาน", "อบจ.พระนครศรีอยุธยา"]
+            },
+            {
+                id: 1024,
+                year: 2560,
+                province: "พระนครศรีอยุธยา",
+                district: "บางบาล / พระนครศรีอยุธยา",
+                subdistrict: "บางหัก, คลองสระบัว",
+                region: "CENTRAL",
+                type: "RIVER",
+                typeName: "น้ำเอ่อล้นตลิ่ง (เซินกา)",
+                isHotspot: true,
+                lat: 14.3700,
+                lng: 100.5500,
+                severity: "MEDIUM",
+                severityText: "ปานกลาง",
+                waterLevel: 1.5,
+                damageVal: 1800,
+                households: 19000,
+                budget: 520,
+                cause: "การผันน้ำเข้าทุ่งรับน้ำ 7 ทุ่งในจังหวัดอยุธยาเพื่อปกป้องกรุงเทพฯ ทำให้น้ำท่วมขังพื้นที่เกษตรกรรมนอกคันกั้น",
+                impact: "เกษตรกรยอมเสียสละพื้นที่นาข้าวเพื่อให้เป็นพื้นที่รับน้ำชั่วคราว",
+                agencies: ["ปภ.", "กรมชลประทาน", "จังหวัดพระนครศรีอยุธยา"]
+            },
+
+            // --- สงขลา / หาดใหญ่ (3 ครั้ง) ---
+            {
+                id: 101,
+                year: 2568,
+                province: "สงขลา",
+                district: "หาดใหญ่ / เมืองสงขลา",
+                subdistrict: "คอหงส์, หาดใหญ่, พะวง",
+                region: "SOUTH",
+                type: "URBAN",
+                typeName: "น้ำท่วมขังเมือง / เอ่อล้น",
+                isHotspot: true,
+                lat: 6.9996,
+                lng: 100.4739,
+                severity: "HIGH",
+                severityText: "รุนแรงมาก",
+                waterLevel: 1.8,
+                damageVal: 3800,
+                households: 32000,
+                budget: 1100,
+                cause: "ฝนตกหนักสะสมจากมรสุมตะวันออกเฉียงเหนือระลอกใหญ่ ร่วมกับคลองอู่ตะเภาระบายน้ำไม่ทัน ทำให้น้ำทะลักท่วมย่านการค้าและชุมชนเมืองหาดใหญ่",
+                impact: "ย่านเศรษฐกิจในตัวเมืองหาดใหญ่ท่วมขัง 2-3 วัน ร้านค้าและย่านย่อยได้รับผลกระทบ การจราจรทางบกและทางอากาศชะลอตัว",
+                agencies: ["ปภ.", "เทศบาลนครหาดใหญ่", "กองทัพภาคที่ 4", "กรมชลประทาน", "อบจ.สงขลา"]
+            },
+            {
+                id: 1012,
+                year: 2563,
+                province: "สงขลา",
+                district: "หาดใหญ่ / สะเดา / ควนเนียง",
+                subdistrict: "หาดใหญ่ใน, ปาดังเบซาร์",
+                region: "SOUTH",
+                type: "URBAN",
+                typeName: "น้ำหลากลุ่มน้ำอู่ตะเภา",
+                isHotspot: true,
+                lat: 6.9800,
+                lng: 100.4500,
+                severity: "HIGH",
+                severityText: "รุนแรงมาก",
+                waterLevel: 1.6,
+                damageVal: 2600,
+                households: 24000,
+                budget: 780,
+                cause: "ฝนตกหนักสะสมในเทือกเขาสังDirectory ปริมาณน้ำหลากไหลลงคลองอู่ตะเภาเอ่อล้นเข้าท่วมพื้นที่หาดใหญ่ในและสะเดา",
+                impact: "ชุมชนริมคลองระบายน้ำอู่ตะเภาท่วมขังสูง ต้องเดินเครื่องสูบน้ำขนาดใหญ่เร่งระบายออกสู่ทะเลสาบสงขลา",
+                agencies: ["ปภ.", "เทศบาลนครหาดใหญ่", "กรมชลประทาน"]
+            },
+            {
+                id: 1013,
+                year: 2560,
+                province: "สงขลา",
+                district: "ระโนด / กระแสสินธุ์ / สทิงพระ",
+                subdistrict: "ระโนด, กระแสสินธุ์",
+                region: "SOUTH",
+                type: "COASTAL",
+                typeName: "น้ำทะเลสาบสงขลาหนุนท่วม",
+                isHotspot: true,
+                lat: 7.7700,
+                lng: 100.3200,
+                severity: "HIGH",
+                severityText: "รุนแรงมาก",
+                waterLevel: 1.9,
+                damageVal: 3100,
+                households: 29000,
+                budget: 890,
+                cause: "มรสุมภาคใต้ทำให้น้ำในทะเลสาบสงขลาเพิ่มสูง เอ่อล้นท่วม คาบสมุทรสทิงพระและ อ.ระโนด ยาวนานกว่า 3 สัปดาห์",
+                impact: "สวนโหนดและนาข้าวระโนดจมน้ำ การสัญจรต้องใช้เรือเป็นหลัก",
+                agencies: ["ปภ.", "กองทัพเรือ", "อบจ.สงขลา"]
+            },
+
+            // --- อุบลราชธานี (3 ครั้ง) ---
+            {
+                id: 5,
+                year: 2565,
+                province: "อุบลราชธานี",
+                district: "วารินชำราบ / เมืองอุบลราชธานี",
+                subdistrict: "ในเมือง, หนองกินเพล",
+                region: "NORTHEAST",
+                type: "RIVER",
+                typeName: "น้ำเอ่อล้นตลิ่ง (มูล-ชี)",
+                isHotspot: true,
+                lat: 15.1950,
+                lng: 104.8580,
+                severity: "CRITICAL",
+                severityText: "วิกฤติต่างระดับ",
+                waterLevel: 4.5,
+                damageVal: 8500,
+                households: 62000,
+                budget: 2800,
+                cause: "พายุโนรู (Noru) ร่วมกับสภาวะลานีญา น้ำจากลุ่มน้ำมูลและชีมารวมกันมหาศาล ระบายออกแม่น้ำโขงไม่ทัน",
+                impact: "ท่วมขังยาวนานกว่า 2 เดือน ชุมชนวารินชำราบจมน้ำลึก สะพานประชาธิปไตยถูกตัดขาด",
+                agencies: ["ปภ.", "สทนช.", "กรมชลประทาน", "กองทัพบก", "GISTDA"]
+            },
+            {
+                id: 52,
+                year: 2562,
+                province: "อุบลราชธานี",
+                district: "เมืองอุบลราชธานี / ดอนมดแดง",
+                subdistrict: "กุดลาด, เหล่าเสือโก้ก",
+                region: "NORTHEAST",
+                type: "RIVER",
+                typeName: "มหาอุทกภัยโพดุล-คาจิกิ",
+                isHotspot: true,
+                lat: 15.2286,
+                lng: 104.8564,
+                severity: "CRITICAL",
+                severityText: "วิกฤติต่างระดับ",
+                waterLevel: 3.8,
+                damageVal: 7200,
+                households: 51000,
+                budget: 2300,
+                cause: "พายุโพดุลและคาจิกิถล่มภาคอีสานตอนล่างพร้อมกัน ปริมาณฝนเกิน 400 มม. น้ำมูลเอ่อล้นท่วมเมืองอุบลฯ",
+                impact: "ศูนย์พักพิงชั่วคราวต้องรองรับผู้ประสบภัยกว่า 50,000 คน นานนับเดือน",
+                agencies: ["ปภ.", "กองทัพบก", "สทนช.", "มูลนิธิร่วมกตัญญู"]
+            },
+            {
+                id: 53,
+                year: 2567,
+                province: "อุบลราชธานี",
+                district: "วารินชำราบ / ตระการพืชผล",
+                subdistrict: "ท่าช้าง, ขุหลุ",
+                region: "NORTHEAST",
+                type: "RIVER",
+                typeName: "น้ำมูลเอ่อล้นตลิ่ง",
+                isHotspot: true,
+                lat: 15.2100,
+                lng: 104.8400,
+                severity: "MEDIUM",
+                severityText: "ปานกลาง",
+                waterLevel: 1.6,
+                damageVal: 1900,
+                households: 18000,
+                budget: 540,
+                cause: "ปริมาณน้ำเหนือหลากจากแม่น้ำชีและมูลไหลสมทบ เอ่อล้นเข้าท่วมพื้นที่ลุ่มต่ำวารินชำราบตามวงรอบปีปกติ",
+                impact: "ชุมชนเกาะหาดคูเดื่อถูกน้ำท่วม ต้องยกของขึ้นที่สูงและสัญจรทางเรือ",
+                agencies: ["ปภ.", "กรมชลประทาน", "เทศบาลเมืองวารินชำราบ"]
+            },
+
+            // --- นครศรีธรรมราช (3 ครั้ง) ---
+            {
+                id: 103,
+                year: 2568,
+                province: "นครศรีธรรมราช",
+                district: "เมืองนครศรีธรรมราช / ชะอวด",
+                subdistrict: "ในเมือง, ชะอวด, ท่าเรือ",
+                region: "SOUTH",
+                type: "FLASH",
+                typeName: "น้ำป่าไหลหลาก / เอ่อล้น",
+                isHotspot: true,
+                lat: 8.4304,
+                lng: 99.9631,
+                severity: "HIGH",
+                severityText: "รุนแรงมาก",
+                waterLevel: 2.2,
+                damageVal: 3200,
+                households: 31000,
+                budget: 950,
+                cause: "ฝนตกหนักสะสมบนเทือกเขาหลวง ไหลหลากลงสู่คลองท่าดี เอ่อล้นทะลักเข้าท่วมเขตเทศบาลนครนครศรีธรรมราชและพื้นที่ลุ่มต่ำชะอวด",
+                impact: "ถนนสายหลักท่วมขัง โรงพยาบาลมหาราชนครศรีธรรมราชต้องเฝ้าระวังพื้นที่เกษตรปาล์ม/ยางเสียหาย",
+                agencies: ["ปภ.", "กองทัพภาคที่ 4", "เทศบาลนครนครศรีธรรมราช", "อบจ.นครศรีธรรมราช"]
+            },
+            {
+                id: 22,
+                year: 2563,
+                province: "นครศรีธรรมราช",
+                district: "เมืองนครศรีธรรมราช / พระพรหม / ลานสกา",
+                subdistrict: "ในเมือง, ลานสกา",
+                region: "SOUTH",
+                type: "FLASH",
+                typeName: "น้ำป่าไหลหลากฉับพลัน",
+                isHotspot: true,
+                lat: 8.4200,
+                lng: 99.9500,
+                severity: "CRITICAL",
+                severityText: "วิกฤติต่างระดับ",
+                waterLevel: 2.6,
+                damageVal: 5400,
+                households: 45000,
+                budget: 1650,
+                cause: "มรสุมตะวันออกเฉียงเหนือถล่มฝนตกหนักสะสมทุบสถิติ น้ำป่าไหลทะลักท่วมเมืองนครศรีธรรมราชจมลึกในเวลาไม่กี่ชั่วโมง",
+                impact: "อุทกภัยภาคใต้ครั้งใหญ่ย่านศูนย์กลางเศรษฐกิจนครศรีธรรมราชจมน้ำ ทางหลวงสายหลักตัดขาด",
+                agencies: ["ปภ.", "กองทัพเรือ", "กองทัพบก", "เทศบาลนครนครศรีธรรมราช"]
+            },
+            {
+                id: 222,
+                year: 2560,
+                province: "นครศรีธรรมราช",
+                district: "ชะอวด / ปากพะยูน / ทุ่งสง",
+                subdistrict: "ชะอวด, ปากแพรก",
+                region: "SOUTH",
+                type: "RIVER",
+                typeName: "น้ำท่วมขังพื้นที่ลุ่มต่ำ",
+                isHotspot: true,
+                lat: 8.1800,
+                lng: 99.9600,
+                severity: "CRITICAL",
+                severityText: "วิกฤติต่างระดับ",
+                waterLevel: 2.8,
+                damageVal: 6100,
+                households: 48000,
+                budget: 1950,
+                cause: "ฝนตกหนักสะสมเกิน 600 มม. ในมรสุมเดือนมกราคม ทำให้น้ำจากเทือกเขาหลวงทะลักท่วมพื้นที่พรุควนเคร็งและชะอวด",
+                impact: "พื้นที่พรุควนเคร็งจมน้ำนานกว่า 1 เดือน สวนยางพาราเสียหายเป็นวงกว้าง",
+                agencies: ["ปภ.", "กองทัพเรือ", "กรมชลประทาน"]
+            },
+
+            // --- สุโขทัย (3 ครั้ง) ---
+            {
+                id: 7,
+                year: 2564,
+                province: "สุโขทัย",
+                district: "เมืองสุโขทัย / ศรีสำโรง",
+                subdistrict: "ปากแคว, คลองกระจง",
+                region: "NORTH",
+                type: "RIVER",
+                typeName: "น้ำเอ่อล้น / พนังขาด",
+                isHotspot: true,
+                lat: 17.0078,
+                lng: 99.8230,
+                severity: "HIGH",
+                severityText: "รุนแรงมาก",
+                waterLevel: 1.9,
+                damageVal: 2900,
+                households: 25000,
+                budget: 780,
+                cause: "อิทธิพลพายุเตียนหมู่ (Dianmu) พนังกั้นน้ำแม่น้ำยมบริเวณ ต.ปากแคว พังทลาย",
+                impact: "น้ำไหลทะลักเข้าท่วมเขตเทศบาลเมืองสุโขทัยอย่างรวดเร็ว โบราณสถานและโรงพยาบาลได้รับผลกระทบ",
+                agencies: ["ปภ.", "กรมชลประทาน", "กองทัพบก", "อบจ.สุโขทัย"]
+            },
+            {
+                id: 72,
+                year: 2567,
+                province: "สุโขทัย",
+                district: "สวรรคโลก / ศรีสำโรง",
+                subdistrict: "วังไม้ขอน, คลองพนมมาศ",
+                region: "NORTH",
+                type: "RIVER",
+                typeName: "น้ำยมหลากล้นตลิ่ง",
+                isHotspot: true,
+                lat: 17.1800,
+                lng: 99.8300,
+                severity: "HIGH",
+                severityText: "รุนแรงมาก",
+                waterLevel: 2.1,
+                damageVal: 3100,
+                households: 27000,
+                budget: 820,
+                cause: "ปริมาณน้ำยมหลากมหาศาลจากแพร่ ไหลทะลักประตูระบายน้ำบ้านหาดสะพานจันทร์ เอ่อล้นคันกั้นน้ำเข้าท่วมบ้านเรือนและนาข้าว",
+                impact: "คันดินริมแม่น้ำยมทรุดตัวหลายจุด น้ำทะลักท่วมพื้นที่เกษตรกรรมสวรรคโลกและศรีสำโรง",
+                agencies: ["ปภ.", "กรมชลประทาน", "จังหวัดสุโขทัย"]
+            },
+            {
+                id: 73,
+                year: 2560,
+                province: "สุโขทัย",
+                district: "เมืองสุโขทัย / กงไกรลาศ",
+                subdistrict: "ธานี, กงไกรลาศ",
+                region: "NORTH",
+                type: "RIVER",
+                typeName: "น้ำยมเอ่อล้นเมืองสุโขทัย",
+                isHotspot: true,
+                lat: 17.0100,
+                lng: 99.8500,
+                severity: "MEDIUM",
+                severityText: "ปานกลาง",
+                waterLevel: 1.5,
+                damageVal: 1600,
+                households: 15000,
+                budget: 450,
+                cause: "น้ำยมหลากล้นตลิ่งช่วงพายุเซินกา ผันน้ำเข้าคลองย่อยระบายไม่ทัน เอ่อท่วมย่านตลาดเทศบาลเมืองสุโขทัย",
+                impact: "ย่านการค้าเมืองสุโขทัยต้องวางบิ๊กแบ็กป้องกัน และเร่งสูบน้ำออกแม่น้ำยม",
+                agencies: ["ปภ.", "เทศบาลเมืองสุโขทัย", "กรมชลประทาน"]
+            },
+
+            // --- น่าน (2 ครั้ง) ---
+            {
+                id: 16,
+                year: 2567,
+                province: "น่าน",
+                district: "เมืองน่าน / เวียงสา / ท่าวังผา",
+                subdistrict: "ในเวียง, กลางเวียง, ท่าวังผา",
+                region: "NORTH",
+                type: "RIVER",
+                typeName: "น้ำเอ่อล้นตลิ่ง (แม่น้ำน่าน)",
+                isHotspot: true,
+                lat: 18.7756,
+                lng: 100.7730,
+                severity: "HIGH",
+                severityText: "รุนแรงมาก",
+                waterLevel: 2.2,
+                damageVal: 2600,
+                households: 23000,
+                budget: 790,
+                cause: "มรสุมฝนตกหนักสะสมในพื้นที่ทิวเขาหลวงพระบาง แม่น้ำน่านเอ่อล้นเข้าท่วมเทศบาลเมืองน่านทะลักคันกั้นน้ำ และท่วมขังหนักใน อ.เวียงสา",
+                impact: "โบราณสถานวัดภูมินทร์ได้รับความเสี่ยง ย่านเศรษฐกิจเมืองน่านและ อ.เวียงสา จมน้ำสูง 1-2 เมตร",
+                agencies: ["ปภ.", "เทศบาลเมืองน่าน", "กองทัพบก", "กรมชลประทาน"]
+            },
+            {
+                id: 162,
+                year: 2561,
+                province: "น่าน",
+                district: "ท่าวังผา / ปัว / แม่จริม",
+                subdistrict: "ท่าวังผา, ปัว",
+                region: "NORTH",
+                type: "FLASH",
+                typeName: "น้ำป่าไหลหลากลุ่มน้ำน่าน",
+                isHotspot: true,
+                lat: 19.1100,
+                lng: 100.8000,
+                severity: "MEDIUM",
+                severityText: "ปานกลาง",
+                waterLevel: 1.6,
+                damageVal: 1400,
+                households: 12500,
+                budget: 390,
+                cause: "ฝนตกหนักสะสมบนเทือกเขาตอนเหนือ แม่น้ำน่านเอ่อล้นตลิ่งเข้าท่วมชุมชนริมน้ำ อ.ท่าวังผา ฉับพลัน",
+                impact: "บ้านเรือนริมน้ำน่านถูกน้ำท่วมขัง 2-3 วัน พื้นที่เกษตรนาข้าวได้รับความเสียหาย",
+                agencies: ["ปภ.", "อบจ.น่าน", "กองทัพบก"]
+            },
+
+            // --- ชัยภูมิ (2 ครั้ง) ---
+            {
+                id: 8,
+                year: 2564,
+                province: "ชัยภูมิ",
+                district: "เมืองชัยภูมิ / จัตุรัส",
+                subdistrict: "ในเมือง, หนองบัวใหญ่",
+                region: "NORTHEAST",
+                type: "FLASH",
+                typeName: "น้ำป่า / เอ่อล้น",
+                isHotspot: true,
+                lat: 15.8068,
+                lng: 102.0315,
+                severity: "HIGH",
+                severityText: "รุนแรงมาก",
+                waterLevel: 2.0,
+                damageVal: 3100,
+                households: 31000,
+                budget: 950,
+                cause: "น้ำป่าจากเทือกเขาชีหลงและเขื่อนลำปะทาวเอ่อล้น ทะลักเข้าท่วมใจกลางเมืองชัยภูมิแบบไม่ทันตั้งตัว",
+                impact: "โรงพยาบาลชัยภูมิถูกน้ำท่วมล้อมรอบ ระบบการขนส่งผู้ป่วยวิกฤติต้องใช้เรือและรถยกสูง",
+                agencies: ["ปภ.", "กองทัพบก", "องค์กรปกครองส่วนท้องถิ่น", "มูลนิธิป่อเต็กตึ๊ง"]
+            },
+            {
+                id: 82,
+                year: 2565,
+                province: "ชัยภูมิ",
+                district: "คอนสวรรค์ / บำเหน็จณรงค์",
+                subdistrict: "คอนสวรรค์, บ้านเพชร",
+                region: "NORTHEAST",
+                type: "RIVER",
+                typeName: "น้ำชีเอ่อล้นตลิ่ง",
+                isHotspot: true,
+                lat: 15.9500,
+                lng: 102.2500,
+                severity: "MEDIUM",
+                severityText: "ปานกลาง",
+                waterLevel: 1.5,
+                damageVal: 1700,
+                households: 16000,
+                budget: 480,
+                cause: "ปริมาณน้ำสะสมจากลำน้ำชีเอ่อล้นตลิ่งเข้าท่วมพื้นที่เกษตรและชุมชนลุ่มต่ำ อ.คอนสวรรค์",
+                impact: "พื้นที่นาข้าวและไร่มันสำปะหลังถูกน้ำท่วมขังยาวนานกว่า 2 สัปดาห์",
+                agencies: ["ปภ.", "กรมชลประทาน", "อบจ.ชัยภูมิ"]
+            },
+
+            // --- นครสวรรค์ (1 ครั้ง) ---
+            {
+                id: 25,
+                year: 2560,
+                province: "นครสวรรค์",
+                district: "ชุมแสง / เมืองนครสวรรค์",
+                subdistrict: "ชุมแสง, ปากน้ำโพ",
+                region: "CENTRAL",
+                type: "RIVER",
+                typeName: "น้ำเอ่อล้นตลิ่ง (ปากน้ำโพ)",
+                isHotspot: true,
+                lat: 15.8924,
+                lng: 100.3012,
+                severity: "HIGH",
+                severityText: "รุนแรงมาก",
+                waterLevel: 2.0,
+                damageVal: 3100,
+                households: 27000,
+                budget: 880,
+                cause: "จุดรวมแม่น้ำ ปิง วัง ยม น่าน มีปริมาณน้ำไหลผ่านเกิน 2,500 ลบ.ม./วินาที เอ่อล้นท่วมตลาดชุมแสงและพื้นที่ลุ่มต่ำ",
+                impact: "ตลาดโบราณชุมแสงท่วมขังนานกว่า 1 เดือน พื้นที่เกษตรลุ่มน้ำเจ้าพระยาตอนบนเสียหายหนัก",
+                agencies: ["ปภ.", "กรมชลประทาน", "เทศบาลเมืองชุมแสง"]
+            },
+
+            // --- พิจิตร (1 ครั้ง) ---
+            {
+                id: 26,
+                year: 2558,
+                province: "พิจิตร",
+                district: "สามง่าม / โพทะเล",
+                subdistrict: "รังนก, บางคลาน",
+                region: "NORTH",
+                type: "RIVER",
+                typeName: "น้ำเอ่อล้นตลิ่ง (แม่น้ำยม)",
+                isHotspot: true,
+                lat: 16.5120,
+                lng: 100.1856,
+                severity: "MEDIUM",
+                severityText: "ปานกลาง",
+                waterLevel: 1.6,
+                damageVal: 1050,
+                households: 9500,
+                budget: 310,
+                cause: "แม่น้ำยมที่ไม่มีเขื่อนกักเก็บน้ำเอ่อล้นตลิ่งเข้าท่วมชุมชนริมน้ำ อ.สามง่าม และโพทะเล เป็นวงรอบปกติทุกปี",
+                impact: "วัดบางคลานและบ้านเรือนริมน้ำยมท่วมขัง ประชาชนสัญจรทางเรือนานกว่า 1 เดือน",
+                agencies: ["ปภ.", "กรมชลประทาน", "อบจ.พิจิตร"]
+            },
+
+            // --- นราธิวาส (1 ครั้ง) ---
+            {
+                id: 3,
+                year: 2566,
+                province: "นราธิวาส",
+                district: "ระแงะ / สุไหงโกลก",
+                subdistrict: "ตันหยงมัส, สุไหงโกลก",
+                region: "SOUTH",
+                type: "FLASH",
+                typeName: "น้ำป่าไหลหลาก",
+                isHotspot: true,
+                lat: 6.0289,
+                lng: 101.9660,
+                severity: "HIGH",
+                severityText: "รุนแรงมาก",
+                waterLevel: 2.1,
+                damageVal: 2400,
+                households: 29000,
+                budget: 820,
+                cause: "มรสุมตะวันออกเฉียงเหนือพัดปกคลุมอ่าวไทย เกิดฝนตกหนักบ่อเกิดน้ำป่าหลากลุ่มน้ำโก-ลก และสายบุรี",
+                impact: "เส้นทางรถไฟสายใต้ถูกตัดขาด ชุมชนริมแม่น้ำโกลกถูกน้ำท่วมมิดหลังคา",
+                agencies: ["ปภ.", "กองทัพภาคที่ 4", "ศอ.บต.", "องค์กรปกครองส่วนท้องถิ่น"]
+            },
+
+            // --- ปราจีนบุรี (1 ครั้ง) ---
+            {
+                id: 4,
+                year: 2566,
+                province: "ปราจีนบุรี",
+                district: "กบินทร์บุรี / ประจันตคาม",
+                subdistrict: "กบินทร์, โคกแท่น",
+                region: "EAST",
+                type: "RIVER",
+                typeName: "น้ำเอ่อล้นตลิ่ง",
+                isHotspot: true,
+                lat: 13.9825,
+                lng: 101.7183,
+                severity: "MEDIUM",
+                severityText: "ปานกลาง",
+                waterLevel: 1.4,
+                damageVal: 1200,
+                households: 11000,
+                budget: 380,
+                cause: "น้ำป่าจากอุทยานแห่งชาติเขาใหญ่และทับลานไหลสมทบแควหนุมาน ทำให้น้ำเอ่อล้นเข้าท่วมตลาดเก่ากบินทร์บุรี",
+                impact: "ตลาดโบราณกบินทร์บุรีถูกน้ำท่วมขังสูง 50-80 ซม. ย่านเศรษฐกิจท้องถิ่นได้รับผลกระทบ",
+                agencies: ["ปภ.", "กรมชลประทาน", "เทศบาลตำบลกบินทร์"]
+            },
+
+            // --- นนทบุรี (1 ครั้ง) ---
+            {
+                id: 19,
+                year: 2565,
+                province: "นนทบุรี",
+                district: "ปากเกร็ด / เมืองนนทบุรี",
+                subdistrict: "เกาะเกร็ด, บางกระสอ",
+                region: "CENTRAL",
+                type: "COASTAL",
+                typeName: "น้ำทะเลหนุน + น้ำเอ่อล้น",
+                isHotspot: true,
+                lat: 13.9130,
+                lng: 100.4988,
+                severity: "HIGH",
+                severityText: "รุนแรงมาก",
+                waterLevel: 1.6,
+                damageVal: 2400,
+                households: 26000,
+                budget: 720,
+                cause: "ปริมาณน้ำเหนือหลากผ่านเจ้าพระยาผสมกับน้ำทะเลหนุนสูงระลอกใหญ่ ทะลักท่วมชุมชนนอกคันกั้นน้ำนนทบุรีและเกาะเกร็ด",
+                impact: "ชุมชนเกาะเกร็ดและริมสองฝั่งเจ้าพระยาท่วมขังสูง เดินทางด้วยเรือ กระทบการท่องเที่ยว",
+                agencies: ["ปภ.", "เทศบาลนครนนทบุรี", "กรมชลประทาน"]
+            },
+
+            // --- กรุงเทพมหานคร (1 ครั้ง) ---
+            {
+                id: 6,
+                year: 2565,
+                province: "กรุงเทพมหานคร",
+                district: "ลาดกระบัง / ประเวศ / ดอนเมือง",
+                subdistrict: "ทับยาว, ดอนเมือง",
+                region: "CENTRAL",
+                type: "URBAN",
+                typeName: "น้ำท่วมขังเมืองรอการระบาย",
+                isHotspot: true,
+                lat: 13.7563,
+                lng: 100.5018,
+                severity: "MEDIUM",
+                severityText: "ปานกลาง",
+                waterLevel: 0.8,
+                damageVal: 2100,
+                households: 45000,
+                budget: 650,
+                cause: "ฝนตกหนักเกิน 150 มม. ในเวลารวดเร็ว ประกอบกับระดับน้ำในคลองประเวศและคลองแสนแสบสูงเกินขีดความสามารถปั๊มน้ำ",
+                impact: "ถนนสายหลักเกิดอัมพาตทางการจราจร นิคมอุตสาหกรรมลาดกระบังต้องตั้งคันกั้นน้ำเร่งด่วน",
+                agencies: ["กรุงเทพมหานคร (กทม.)", "ปภ.", "กรมชลประทาน"]
+            },
+
+            // --- ร้อยเอ็ด (1 ครั้ง) ---
+            {
+                id: 10,
+                year: 2562,
+                province: "ร้อยเอ็ด",
+                district: "เสลภูมิ",
+                subdistrict: "วังหลวง, โนนชัยศรี",
+                region: "NORTHEAST",
+                type: "RIVER",
+                typeName: "พนังกั้นน้ำขาด",
+                isHotspot: true,
+                lat: 16.0864,
+                lng: 103.9510,
+                severity: "HIGH",
+                severityText: "รุนแรงมาก",
+                waterLevel: 2.1,
+                damageVal: 2200,
+                households: 21000,
+                budget: 680,
+                cause: "พายุโพดุลและคาจิกิ พนังกั้นน้ำลำเซบายและแม่น้ำยังขาด ทำให้น้ำทะลักเข้าท่วมทุ่งนาเสลภูมิ",
+                impact: "พื้นที่นาข้าวเสียหายหนักกว่า 150,000 ไร่ ถนนเชื่อมหมู่บ้านขาดตัดขาดการเดินทาง",
+                agencies: ["ปภ.", "กรมชลประทาน", "องค์กรปกครองส่วนท้องถิ่น"]
+            },
+
+            // --- เพชรบุรี (1 ครั้ง) ---
+            {
+                id: 11,
+                year: 2561,
+                province: "เพชรบุรี",
+                district: "เมืองเพชรบุรี / ท่ายาง",
+                subdistrict: "ท่ายาง, ท่ายาง",
+                region: "WEST",
+                type: "RIVER",
+                typeName: "น้ำเอ่อล้นเขื่อน/ตลิ่ง",
+                isHotspot: true,
+                lat: 13.1146,
+                lng: 99.9405,
+                severity: "MEDIUM",
+                severityText: "ปานกลาง",
+                waterLevel: 1.2,
+                damageVal: 1100,
+                households: 9800,
+                budget: 320,
+                cause: "เขื่อนแก่งกระจานมีปริมาณน้ำเกินความจุ 100% จำเป็นต้องระบายน้ำลงแม่น้ำเพชรบุรี เอ่อล้นท่วมเมืองเพชรบุรี",
+                impact: "ย่านการค้าเมืองเพชรบุรีถูกน้ำท่วมขังสูง 30-50 ซม. เร่งติดตั้งเครื่องสูบน้ำระบายลงทะเล",
+                agencies: ["ปภ.", "กรมชลประทาน", "จังหวัดเพชรบุรี"]
+            },
+
+            // --- สกลนคร (1 ครั้ง) ---
+            {
+                id: 12,
+                year: 2560,
+                province: "สกลนคร",
+                district: "เมืองสกลนคร",
+                subdistrict: "ธาตุเชิงชุม, ธาตุนาเวง",
+                region: "NORTHEAST",
+                type: "FLASH",
+                typeName: "น้ำป่า / อ่างเก็บน้ำล้น",
+                isHotspot: false,
+                lat: 17.1612,
+                lng: 104.1476,
+                severity: "CRITICAL",
+                severityText: "วิกฤติต่างระดับ",
+                waterLevel: 2.5,
+                damageVal: 5900,
+                households: 43000,
+                budget: 1800,
+                cause: "พายุเซินกา (Sonca) ทำฝนตกหนักทุบสถิติ หนองหารเอ่อล้น ร่วมกับอ่างเก็บน้ำห้วยทรายขมิ้นพังทลายบางส่วน",
+                impact: "เมืองสกลนครและสนามบินสกลนครถูกน้ำท่วมฉับพลัน ต้องปิดการให้บริการเร่งด่วน",
+                agencies: ["ปภ.", "กองทัพบก", "สทนช.", "GISTDA"]
+            },
+
+            // --- หนองคาย (1 ครั้ง) ---
+            {
+                id: 2,
+                year: 2567,
+                province: "หนองคาย",
+                district: "เมืองหนองคาย / ท่าบ่อ",
+                subdistrict: "ในเมือง, หนองกอมโฮม",
+                region: "NORTHEAST",
+                type: "RIVER",
+                typeName: "น้ำเอ่อล้นตลิ่ง (น้ำโขง)",
+                isHotspot: false,
+                lat: 17.8783,
+                lng: 102.7420,
+                severity: "HIGH",
+                severityText: "รุนแรงมาก",
+                waterLevel: 1.8,
+                damageVal: 1800,
+                households: 18500,
+                budget: 550,
+                cause: "แม่น้ำโขงเพิ่มสูงขึ้นอย่างรวดเร็ว ทำให้น้ำดันย้อนเข้าลำน้ำสาขา ไหลทะลักเข้าท่วมเขตเทศบาลเมืองหนองคาย",
+                impact: "พื้นที่เกษตรกรรมและเขตเมืองริมน้ำโขงจมน้ำ สูง 1-1.5 เมตร ประชาชนอพยพสิ่งของขึ้นที่สูง",
+                agencies: ["ปภ.", "สทนช.", "องค์กรปกครองส่วนท้องถิ่น", "ตำรวจน้ำ"]
+            },
+
+            // --- ตาก (1 ครั้ง) ---
+            {
+                id: 14,
+                year: 2558,
+                province: "ตาก",
+                district: "แม่สอด",
+                subdistrict: "แม่สอด, แม่ตาว",
+                region: "WEST",
+                type: "RIVER",
+                typeName: "น้ำเอ่อล้นตลิ่ง (แม่น้ำเมย)",
+                isHotspot: false,
+                lat: 16.7161,
+                lng: 98.5708,
+                severity: "MEDIUM",
+                severityText: "ปานกลาง",
+                waterLevel: 1.3,
+                damageVal: 980,
+                households: 8900,
+                budget: 280,
+                cause: "แม่น้ำเมยชายแดนไทย-เมียนมา เอ่อล้นตลิ่งจากฝนตกหนักในฝั่งเมียนมาและเทือกเขาถนนกักคี",
+                impact: "ตลาดริมเมยและด่านศุลกากรแม่สอดถูกน้ำท่วม สินค้าการค้าชายแดนได้รับความเสียหาย",
+                agencies: ["ปภ.", "ทหารพราน", "องค์กรปกครองส่วนท้องถิ่น"]
+            }
+        ];
+
+        // Global Instances
+        let map;
+        let mapMarkers = [];
+        let trendChartInstance = null;
+        let regionChartInstance = null;
+        let provinceChartInstance = null;
+
+        // Init App
+        document.addEventListener("DOMContentLoaded", function () {
+            initMap();
+            applyFilters();
+        });
+
+        function initMap() {
+            map = L.map('map').setView([13.736717, 100.523186], 6);
+
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; OpenStreetMap &copy; CARTO',
+                subdomains: 'abcd',
+                maxZoom: 19
+            }).addTo(map);
+        }
+
+        function applyFilters() {
+            const selectedYear = document.getElementById('filter-year').value;
+            const selectedRegion = document.getElementById('filter-region').value;
+            const selectedSeverity = document.getElementById('filter-severity').value;
+            const selectedType = document.getElementById('filter-type').value;
+            const hotspotOnly = document.getElementById('filter-hotspot').checked;
+            const searchText = document.getElementById('filter-search').value.toLowerCase().trim();
+
+            const filtered = floodData.filter(item => {
+                const matchYear = (selectedYear === 'ALL') || (item.year.toString() === selectedYear);
+                const matchRegion = (selectedRegion === 'ALL') || (item.region === selectedRegion);
+                const matchSeverity = (selectedSeverity === 'ALL') || (item.severity === selectedSeverity);
+                const matchType = (selectedType === 'ALL') || (item.type === selectedType);
+                const matchHotspot = !hotspotOnly || item.isHotspot;
+                
+                const matchSearch = !searchText || 
+                    item.province.toLowerCase().includes(searchText) ||
+                    item.district.toLowerCase().includes(searchText) ||
+                    item.subdistrict.toLowerCase().includes(searchText) ||
+                    item.cause.toLowerCase().includes(searchText);
+
+                return matchYear && matchRegion && matchSeverity && matchType && matchHotspot && matchSearch;
+            });
+
+            updateKPIs(filtered);
+            updateMapMarkers(filtered);
+            updateCharts(filtered);
+            updateTable(filtered);
+        }
+
+        function resetFilters() {
+            document.getElementById('filter-year').value = 'ALL';
+            document.getElementById('filter-region').value = 'ALL';
+            document.getElementById('filter-severity').value = 'ALL';
+            document.getElementById('filter-type').value = 'ALL';
+            document.getElementById('filter-hotspot').checked = false;
+            document.getElementById('filter-search').value = '';
+            applyFilters();
+        }
+
+        function updateKPIs(data) {
+            const totalDamage = data.reduce((sum, item) => sum + item.damageVal, 0);
+            const totalHouseholds = data.reduce((sum, item) => sum + item.households, 0);
+            const totalBudget = data.reduce((sum, item) => sum + item.budget, 0);
+            const hotspotCount = data.filter(d => d.isHotspot).length;
+
+            document.getElementById('kpi-damage').innerHTML = `${totalDamage.toLocaleString()} <span class="text-xs text-slate-400 font-normal">ล้านบาท</span>`;
+            document.getElementById('kpi-households').innerHTML = `${totalHouseholds.toLocaleString()} <span class="text-xs text-slate-400 font-normal">ครัวเรือน</span>`;
+            document.getElementById('kpi-budget').innerHTML = `${totalBudget.toLocaleString()} <span class="text-xs text-slate-400 font-normal">ล้านบาท</span>`;
+            document.getElementById('kpi-incidents').innerHTML = `${data.length} <span class="text-xs text-slate-400 font-normal">พื้นที่</span>`;
+            document.getElementById('kpi-hotspot-sub').innerHTML = `<i class="fa-solid fa-fire text-rose-400"></i> ท่วมซ้ำซาก ${hotspotCount} พื้นที่`;
+        }
+
+        function updateMapMarkers(data) {
+            mapMarkers.forEach(marker => map.removeLayer(marker));
+            mapMarkers = [];
+
+            if (data.length === 0) return;
+
+            const bounds = [];
+
+            data.forEach(item => {
+                let color = '#3b82f6';
+                if (item.severity === 'CRITICAL') color = '#ef4444';
+                else if (item.severity === 'HIGH') color = '#f59e0b';
+
+                const circle = L.circleMarker([item.lat, item.lng], {
+                    radius: item.severity === 'CRITICAL' ? 10 : 7,
+                    fillColor: color,
+                    color: item.isHotspot ? '#f43f5e' : '#ffffff',
+                    weight: item.isHotspot ? 2.5 : 1.5,
+                    opacity: 1,
+                    fillOpacity: 0.85
+                }).addTo(map);
+
+                const popupContent = `
+                    <div class="text-xs space-y-1.5 p-1">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-sm text-cyan-300">อุทกภัยปี พ.ศ. ${item.year}</span>
+                            ${item.isHotspot ? '<span class="bg-rose-600/30 text-rose-300 border border-rose-500/40 px-1.5 py-0.5 rounded text-[9px] font-bold">ท่วมซ้ำซาก</span>' : ''}
+                        </div>
+                        <div class="font-semibold text-slate-200">${item.province} (${item.district})</div>
+                        <div class="text-slate-400 text-[11px]">ประเภท: ${item.typeName}</div>
+                        <div class="text-slate-300">ระดับน้ำ: <span class="text-cyan-400 font-bold">${item.waterLevel} ม.</span></div>
+                        <div class="text-slate-300">ความเสียหาย: <span class="text-rose-400 font-bold">${item.damageVal.toLocaleString()} ล้านบาท</span></div>
+                        <div class="grid grid-cols-2 gap-1 mt-2">
+                            <button onclick="openModal(${item.id})" class="bg-slate-700 hover:bg-slate-600 text-white font-semibold py-1 px-1.5 rounded text-[10px] text-center">
+                                ดูครั้งนี้
+                            </button>
+                            <button onclick="openProvinceModal('${item.province}')" class="bg-rose-600 hover:bg-rose-500 text-white font-semibold py-1 px-1.5 rounded text-[10px] text-center">
+                                เจาะลึก จ.${item.province}
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                circle.bindPopup(popupContent);
+                mapMarkers.push(circle);
+                bounds.push([item.lat, item.lng]);
+            });
+
+            if (bounds.length > 0) {
+                map.fitBounds(bounds, { padding: [30, 30], maxZoom: 9 });
+            }
+        }
+
+        function updateCharts(data) {
+            const years = [2558, 2559, 2560, 2561, 2562, 2563, 2564, 2565, 2566, 2567, 2568];
+            const damageByYear = years.map(y => data.filter(d => d.year === y).reduce((acc, curr) => acc + curr.damageVal, 0));
+            const budgetByYear = years.map(y => data.filter(d => d.year === y).reduce((acc, curr) => acc + curr.budget, 0));
+
+            const ctxTrend = document.getElementById('trendChart').getContext('2d');
+            if (trendChartInstance) trendChartInstance.destroy();
+
+            trendChartInstance = new Chart(ctxTrend, {
+                type: 'bar',
+                data: {
+                    labels: years.map(y => `ปี ${y}`),
+                    datasets: [
+                        {
+                            label: 'ความเสียหาย (ล้านบาท)',
+                            data: damageByYear,
+                            backgroundColor: 'rgba(244, 63, 94, 0.75)',
+                            borderColor: 'rgba(244, 63, 94, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'งบเยียวยา (ล้านบาท)',
+                            data: budgetByYear,
+                            backgroundColor: 'rgba(16, 185, 129, 0.75)',
+                            borderColor: 'rgba(16, 185, 129, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#94a3b8', font: { family: 'Kanit', size: 10 } } }
+                    },
+                    scales: {
+                        x: { ticks: { color: '#94a3b8', font: { family: 'Kanit', size: 9 } }, grid: { color: '#1e293b' } },
+                        y: { ticks: { color: '#94a3b8', font: { family: 'Kanit', size: 9 } }, grid: { color: '#1e293b' } }
+                    }
+                }
+            });
+
+            const regionNames = {
+                'NORTH': 'ภาคเหนือ',
+                'NORTHEAST': 'ภาคอีสาน',
+                'CENTRAL': 'ภาคกลาง/กทม.',
+                'SOUTH': 'ภาคใต้',
+                'EAST': 'ภาคตะวันออก',
+                'WEST': 'ภาคตะวันตก'
+            };
+
+            const regionDamageMap = {};
+            data.forEach(item => {
+                const rName = regionNames[item.region] || item.region;
+                regionDamageMap[rName] = (regionDamageMap[rName] || 0) + item.damageVal;
+            });
+
+            const ctxRegion = document.getElementById('regionChart').getContext('2d');
+            if (regionChartInstance) regionChartInstance.destroy();
+
+            regionChartInstance = new Chart(ctxRegion, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(regionDamageMap),
+                    datasets: [{
+                        data: Object.values(regionDamageMap),
+                        backgroundColor: ['#3b82f6', '#06b6d4', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899'],
+                        borderWidth: 1,
+                        borderColor: '#0b1329'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right', labels: { color: '#94a3b8', font: { family: 'Kanit', size: 10 } } }
+                    }
+                }
+            });
+        }
+
+        function updateTable(data) {
+            const tbody = document.getElementById('incident-table-body');
+            document.getElementById('table-count').innerText = data.length;
+            tbody.innerHTML = '';
+
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-slate-500">ไม่พบข้อมูลเหตุการณ์อุทกภัยตรงตามตัวกรอง</td></tr>`;
+                return;
+            }
+
+            data.forEach(item => {
+                let badgeClass = "bg-blue-500/20 text-blue-400 border-blue-500/30";
+                if (item.severity === 'CRITICAL') badgeClass = "bg-rose-500/20 text-rose-400 border-rose-500/30";
+                else if (item.severity === 'HIGH') badgeClass = "bg-amber-500/20 text-amber-400 border-amber-500/30";
+
+                const row = document.createElement('tr');
+                row.className = "hover:bg-slate-700/40 transition cursor-pointer border-b border-slate-700/40";
+
+                row.innerHTML = `
+                    <td class="p-3 font-semibold text-slate-200" onclick="openModal(${item.id})">${item.year}</td>
+                    <td class="p-3 font-medium text-slate-100" onclick="openModal(${item.id})">${item.province} <div class="text-[10px] text-slate-400">${item.district}</div></td>
+                    <td class="p-3 text-slate-300" onclick="openModal(${item.id})">${item.typeName}</td>
+                    <td class="p-3" onclick="openModal(${item.id})">
+                        <div class="flex flex-col gap-1 items-start">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-semibold border ${badgeClass}">${item.severityText}</span>
+                            ${item.isHotspot ? '<span class="bg-rose-950/80 text-rose-300 border border-rose-700/60 px-1.5 py-0.5 rounded text-[9px] font-bold"><i class="fa-solid fa-rotate"></i> ท่วมซ้ำซาก</span>' : ''}
+                        </div>
+                    </td>
+                    <td class="p-3 font-bold text-cyan-400" onclick="openModal(${item.id})">${item.waterLevel} ม.</td>
+                    <td class="p-3 font-bold text-rose-400" onclick="openModal(${item.id})">${item.damageVal.toLocaleString()}</td>
+                    <td class="p-3 text-slate-300" onclick="openModal(${item.id})">
+                        <div class="flex flex-wrap gap-1">
+                            ${item.agencies.slice(0, 2).map(a => `<span class="bg-slate-800 text-slate-300 border border-slate-700 px-1.5 py-0.5 rounded text-[9px]">${a}</span>`).join('')}
+                        </div>
+                    </td>
+                    <td class="p-3 text-center">
+                        <div class="flex items-center justify-center gap-1">
+                            <button onclick="openModal(${item.id})" class="bg-blue-600/30 hover:bg-blue-600 text-blue-300 hover:text-white px-2 py-1 rounded border border-blue-500/40 transition text-[10px]">
+                                เหตุการณ์นี้
+                            </button>
+                            <button onclick="openProvinceModal('${item.province}')" class="bg-rose-600/30 hover:bg-rose-600 text-rose-300 hover:text-white px-2 py-1 rounded border border-rose-500/40 transition text-[10px] font-semibold">
+                                เจาะลึก จ.${item.province}
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Modal Logic: Single Event
+        function openModal(id) {
+            const item = floodData.find(d => d.id === id);
+            if (!item) return;
+
+            document.getElementById('modal-title').innerText = `รายงานอุทกภัย จ.${item.province} (${item.district})`;
+            document.getElementById('modal-year').innerText = item.year;
+            document.getElementById('modal-water').innerText = `${item.waterLevel} เมตร`;
+            document.getElementById('modal-damage').innerText = `${item.damageVal.toLocaleString()} ล้านบาท`;
+            document.getElementById('modal-budget').innerText = `${item.budget.toLocaleString()} ล้านบาท`;
+            document.getElementById('modal-description').innerText = item.cause;
+            document.getElementById('modal-impact').innerText = item.impact;
+
+            const hotspotBadge = document.getElementById('modal-hotspot-badge');
+            if (item.isHotspot) {
+                hotspotBadge.classList.remove('hidden');
+            } else {
+                hotspotBadge.classList.add('hidden');
+            }
+
+            const badge = document.getElementById('modal-severity-badge');
+            badge.innerText = item.severityText;
+            if (item.severity === 'CRITICAL') {
+                badge.className = "px-2.5 py-1 rounded-md text-xs font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30";
+            } else if (item.severity === 'HIGH') {
+                badge.className = "px-2.5 py-1 rounded-md text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30";
+            } else {
+                badge.className = "px-2.5 py-1 rounded-md text-xs font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30";
+            }
+
+            const agenciesContainer = document.getElementById('modal-agencies');
+            agenciesContainer.innerHTML = item.agencies.map(a => `
+                <span class="bg-blue-900/40 text-blue-300 border border-blue-700/50 px-2.5 py-1 rounded-full text-[11px] font-medium flex items-center gap-1">
+                    <i class="fa-solid fa-building-user text-[10px]"></i> ${a}
+                </span>
+            `).join('');
+
+            const provBtn = document.getElementById('modal-prov-btn');
+            provBtn.onclick = () => { closeModal(); openProvinceModal(item.province); };
+
+            document.getElementById('eventModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('eventModal').classList.add('hidden');
+        }
+
+        // NEW Modal Logic: Province Multi-Year Drill Down
+        function openProvinceModal(provinceName) {
+            const provIncidents = floodData.filter(d => d.province.includes(provinceName)).sort((a, b) => b.year - a.year);
+            
+            if (provIncidents.length === 0) return;
+
+            document.getElementById('prov-modal-title').innerText = `เจาะลึกประวัติอุทกภัย จ.${provinceName}`;
+            document.getElementById('prov-modal-count').innerText = `${provIncidents.length} ครั้ง / 11 ปี`;
+
+            // Stats
+            const totalDamage = provIncidents.reduce((s, i) => s + i.damageVal, 0);
+            const totalHouseholds = provIncidents.reduce((s, i) => s + i.households, 0);
+            const totalBudget = provIncidents.reduce((s, i) => s + i.budget, 0);
+            const maxWater = Math.max(...provIncidents.map(i => i.waterLevel));
+
+            document.getElementById('prov-modal-total-damage').innerText = `${totalDamage.toLocaleString()} ล้านบาท`;
+            document.getElementById('prov-modal-total-households').innerText = `${totalHouseholds.toLocaleString()} ครัวเรือน`;
+            document.getElementById('prov-modal-max-water').innerText = `${maxWater} เมตร`;
+            document.getElementById('prov-modal-total-budget').innerText = `${totalBudget.toLocaleString()} ล้านบาท`;
+
+            // Timeline List Injection
+            const timelineContainer = document.getElementById('prov-modal-timeline');
+            timelineContainer.innerHTML = '';
+
+            provIncidents.forEach((inc, idx) => {
+                let cardColor = "border-slate-700 bg-slate-800/60";
+                if (inc.severity === 'CRITICAL') cardColor = "border-rose-500/50 bg-rose-950/20";
+                else if (inc.severity === 'HIGH') cardColor = "border-amber-500/50 bg-amber-950/20";
+
+                const card = document.createElement('div');
+                card.className = `p-4 rounded-xl border ${cardColor} space-y-2 text-xs relative overflow-hidden`;
+
+                card.innerHTML = `
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-700/60 pb-2">
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-0.5 rounded bg-blue-600 text-white font-bold text-xs">พ.ศ. ${inc.year}</span>
+                            <strong class="text-sm font-bold text-slate-100">${inc.district}</strong>
+                            <span class="text-slate-400">(${inc.subdistrict})</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-slate-300">
+                            <span>ระดับน้ำ: <strong class="text-cyan-400">${inc.waterLevel} ม.</strong></span> | 
+                            <span>เสียหาย: <strong class="text-rose-400">${inc.damageVal.toLocaleString()} ล้านบาท</strong></span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                        <div>
+                            <span class="text-slate-400 font-semibold block mb-0.5"><i class="fa-solid fa-cloud-showers-heavy text-blue-400"></i> สาเหตุและลำดับเหตุการณ์:</span>
+                            <p class="text-slate-300 leading-relaxed bg-slate-900/60 p-2.5 rounded border border-slate-800">${inc.cause}</p>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 font-semibold block mb-0.5"><i class="fa-solid fa-house-damage text-amber-400"></i> ผลกระทบเชิงพื้นที่:</span>
+                            <p class="text-slate-300 leading-relaxed bg-slate-900/60 p-2.5 rounded border border-slate-800">${inc.impact}</p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+                        <div class="flex flex-wrap items-center gap-1.5">
+                            <span class="text-slate-400">หน่วยงานระดมช่วยเหลือ:</span>
+                            ${inc.agencies.map(a => `<span class="bg-slate-900 text-blue-300 border border-slate-700 px-2 py-0.5 rounded text-[10px]">${a}</span>`).join('')}
+                        </div>
+                        <div class="text-slate-400">
+                            งบช่วยเหลือ: <strong class="text-emerald-400">${inc.budget.toLocaleString()} ล้านบาท</strong>
+                        </div>
+                    </div>
+                `;
+
+                timelineContainer.appendChild(card);
+            });
+
+            // Render Chart for Province Trend
+            renderProvinceTrendChart(provIncidents);
+
+            document.getElementById('provinceModal').classList.remove('hidden');
+        }
+
+        function closeProvinceModal() {
+            document.getElementById('provinceModal').classList.add('hidden');
+        }
+
+        function renderProvinceTrendChart(incidents) {
+            const sortedAsc = [...incidents].sort((a, b) => a.year - b.year);
+            const years = sortedAsc.map(i => `ปี ${i.year}`);
+            const damages = sortedAsc.map(i => i.damageVal);
+            const waters = sortedAsc.map(i => i.waterLevel);
+
+            const ctx = document.getElementById('provinceTrendChart').getContext('2d');
+            if (provinceChartInstance) provinceChartInstance.destroy();
+
+            provinceChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: years,
+                    datasets: [
+                        {
+                            label: 'ระดับน้ำสูงสุด (เมตร)',
+                            data: waters,
+                            borderColor: '#38bdf8',
+                            backgroundColor: 'rgba(56, 189, 248, 0.2)',
+                            yAxisID: 'y1',
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'มูลค่าความเสียหาย (ล้านบาท)',
+                            data: damages,
+                            borderColor: '#fb7185',
+                            backgroundColor: 'rgba(251, 113, 133, 0.2)',
+                            yAxisID: 'y',
+                            tension: 0.3,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#94a3b8', font: { family: 'Kanit', size: 10 } } }
+                    },
+                    scales: {
+                        x: { ticks: { color: '#94a3b8', font: { family: 'Kanit', size: 9 } }, grid: { color: '#1e293b' } },
+                        y: { 
+                            type: 'linear', position: 'left',
+                            ticks: { color: '#fb7185', font: { family: 'Kanit', size: 9 } }, grid: { color: '#1e293b' } 
+                        },
+                        y1: { 
+                            type: 'linear', position: 'right',
+                            ticks: { color: '#38bdf8', font: { family: 'Kanit', size: 9 } }, grid: { drawOnChartArea: false } 
+                        }
+                    }
+                }
+            });
+        }
+
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
