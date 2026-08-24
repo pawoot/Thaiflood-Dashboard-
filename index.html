@@ -81,6 +81,9 @@
                     <i class="fa-solid fa-fire text-sm animate-pulse"></i> ทางด่วนเจาะลึกจังหวัดท่วมซ้ำซาก (Top Hotspots):
                 </div>
                 <div class="flex flex-wrap gap-2">
+                    <button onclick="openProvinceModal('พิษณุโลก')" class="px-3 py-1.5 bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 border border-rose-500/50 rounded-lg text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
+                        <i class="fa-solid fa-location-dot text-rose-400"></i> พิษณุโลก (3 ครั้ง)
+                    </button>
                     <button onclick="openProvinceModal('เชียงใหม่')" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/40 rounded-lg text-xs font-medium transition flex items-center gap-1.5">
                         <i class="fa-solid fa-location-dot"></i> เชียงใหม่ (3 ครั้ง)
                     </button>
@@ -123,9 +126,9 @@
                     <select id="filter-year" onchange="applyFilters()" class="w-full bg-slate-900 border border-slate-700 rounded-lg text-xs text-slate-200 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
                         <option value="ALL">ทุกปี (2558 - 2568)</option>
                         <option value="2568">2568 (สงขลา / อยุธยา / นครศรีฯ)</option>
-                        <option value="2567">2567 (เชียงราย / เชียงใหม่ / น่าน / สุโขทัย / หนองคาย)</option>
+                        <option value="2567">2567 (เชียงราย / เชียงใหม่ / น่าน / พิษณุโลก / หนองคาย)</option>
                         <option value="2566">2566 (นราธิวาส / ปราจีนบุรี / ลำปาง)</option>
-                        <option value="2565">2565 (เชียงใหม่ / อุบลฯ / อยุธยา / นนทบุรี / ขอนแก่น / กทม.)</option>
+                        <option value="2565">2565 (เชียงใหม่ / อุบลฯ / อยุธยา / พิษณุโลก / กทม.)</option>
                         <option value="2564">2564 (สุโขทัย / ชัยภูมิ / โคราช)</option>
                         <option value="2563">2563 (นครศรีธรรมราช / สุราษฎร์ฯ / ปากช่อง)</option>
                         <option value="2562">2562 (อุบลฯ / ร้อยเอ็ด / พิษณุโลก-บางระกำ)</option>
@@ -177,7 +180,7 @@
                 <div>
                     <label class="block text-xs font-medium text-slate-400 mb-1">ค้นหาพื้นที่/ตำบล/อำเภอ</label>
                     <div class="relative">
-                        <input type="text" id="filter-search" oninput="applyFilters()" placeholder="เช่น เชียงใหม่, หาดใหญ่, บางบาล..." class="w-full bg-slate-900 border border-slate-700 rounded-lg text-xs text-slate-200 pl-8 pr-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <input type="text" id="filter-search" oninput="applyFilters()" placeholder="เช่น พิษณุโลก, บางระกำ, เชียงใหม่..." class="w-full bg-slate-900 border border-slate-700 rounded-lg text-xs text-slate-200 pl-8 pr-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
                         <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-500 text-xs"></i>
                     </div>
                 </div>
@@ -356,7 +359,7 @@
                         <span>ฉากทัศน์ที่ 3: น้ำป่าหลาก & ดินโคลนถล่ม</span>
                         <i class="fa-solid fa-hill-rockslide"></i>
                     </div>
-                    <h4 class="text-sm font-semibold text-slate-200">พื้นที่เสี่ยงสูง: เทือกเขาภาคเหนือ (เชียงราย/น่าน) & อันดามัน</h4>
+                    <h4 class="text-sm font-semibold text-slate-200">พื้นที่เสี่ยงสูง: เทือกเขาภาคเหนือ (เชียงราย/น่าน/พิษณุโลก) & อันดามัน</h4>
                     <p class="text-[11px] text-slate-400 leading-relaxed">
                         ความอุ้มน้ำของดินบนเขาดอยเริ่มลดลงเนื่องจากการใช้ประโยชน์ที่ดิน หากมีพายุหมุนทราปิกัลเข้าปะทะ 1-2 ลูก เสี่ยงต่อการเกิดโคลนถล่มซ้ำรอยปี 2567
                     </p>
@@ -366,7 +369,7 @@
 
     </main>
 
-    <!-- NEW MODAL: Province Multi-Year Deep-Dive Inspector -->
+    <!-- Province Multi-Year Deep-Dive Inspector Modal -->
     <div id="provinceModal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center hidden p-4">
         <div class="bg-slate-900 border border-rose-500/40 rounded-2xl max-w-4xl w-full p-6 shadow-2xl space-y-5 max-h-[92vh] overflow-y-auto custom-scrollbar relative">
             <button onclick="closeProvinceModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-xl">
@@ -380,7 +383,7 @@
                         <span class="px-2.5 py-1 rounded bg-rose-500/20 text-rose-400 border border-rose-500/30 font-bold text-xs flex items-center gap-1">
                             <i class="fa-solid fa-fire text-xs"></i> รายงานวิเคราะห์ท่วมซ้ำซาก
                         </span>
-                        <h2 id="prov-modal-title" class="text-xl font-bold text-slate-100">เจาะลึกประวัติอุทกภัย จ.เชียงใหม่</h2>
+                        <h2 id="prov-modal-title" class="text-xl font-bold text-slate-100">เจาะลึกประวัติอุทกภัย จ.พิษณุโลก</h2>
                     </div>
                     <p class="text-xs text-slate-400 mt-1">สรุปวงรอบเหตุการณ์ ระดับน้ำสูงสุด มูลค่าความเสียหายสะสม และกลไกการเกิดรายปี</p>
                 </div>
@@ -521,6 +524,74 @@
     <script>
         // Multi-Year Dataset (2558 - 2568) with Multiple Historical Incidents per Province
         const floodData = [
+            // --- พิษณุโลก (3 ครั้ง - เพิ่มเติมครบถ้วน) ---
+            {
+                id: 231,
+                year: 2567,
+                province: "พิษณุโลก",
+                district: "บางระกำ / พรหมพีราม / วังทอง",
+                subdistrict: "บางระกำ, พรหมพีราม, วังทอง",
+                region: "NORTH",
+                type: "RIVER",
+                typeName: "น้ำเอ่อล้น / หน่วงน้ำบางระกำ",
+                isHotspot: true,
+                lat: 16.7584,
+                lng: 100.1172,
+                severity: "HIGH",
+                severityText: "รุนแรงมาก",
+                waterLevel: 2.4,
+                damageVal: 2800,
+                households: 24000,
+                budget: 820,
+                cause: "มวลน้ำยมมหาศาลจากแพร่และสุโขทัยหลากล้นตลิ่ง กรมชลประทานผันน้ำเข้าทุ่งรับน้ำ 'บางระกำโมเดล' เพื่อชะลอน้ำก่อนเข้าสู่ลุ่มน้ำเจ้าพระยา ขณะที่ อ.วังทอง เจอน้ำป่าหลากท่วมขังฉับพลัน",
+                impact: "ทุ่งบางระกำรับน้ำกว่า 400 ล้าน ลบ.ม. กลายเป็นทะเลสาบชั่วคราวท่วมขังยาวนาน 2 เดือน บ้านเรือนริมแม่น้ำยมจมน้ำสูง 1.5-2 เมตร",
+                agencies: ["ปภ.", "กรมชลประทาน", "สทนช.", "อบจ.พิษณุโลก", "กองทัพภาคที่ 3"]
+            },
+            {
+                id: 23,
+                year: 2562,
+                province: "พิษณุโลก",
+                district: "บางระกำ / พรหมพีราม",
+                subdistrict: "บางระกำ, พรหมพีราม",
+                region: "NORTH",
+                type: "RIVER",
+                typeName: "น้ำเอ่อล้น (ทุ่งบางระกำ)",
+                isHotspot: true,
+                lat: 16.7400,
+                lng: 100.1000,
+                severity: "HIGH",
+                severityText: "รุนแรงมาก",
+                waterLevel: 2.3,
+                damageVal: 1950,
+                households: 18000,
+                budget: 590,
+                cause: "อิทธิพลพายุโพดุลและคาจิกิ น้ำยมและน่านหลากเข้าท่วมทุ่งรับน้ำบางระกำตามแผนหน่วงน้ำ ชุมชนนอกคันกั้นน้ำท่วมขังยาวนาน",
+                impact: "พื้นที่เกษตรกรรมเปลี่ยนเป็นทุ่งรับน้ำขนาดใหญ่ ประชาชนปรับวิถีชีวิตทำประมงพื้นบ้านชั่วคราว",
+                agencies: ["ปภ.", "กรมชลประทาน", "สทนช.", "อบจ.พิษณุโลก"]
+            },
+            {
+                id: 232,
+                year: 2565,
+                province: "พิษณุโลก",
+                district: "นครไทย / ชาติตระการ / วังทอง",
+                subdistrict: "นครไทย, ป่าแดง, วังทอง",
+                region: "NORTH",
+                type: "FLASH",
+                typeName: "น้ำป่าไหลหลากฉับพลัน",
+                isHotspot: true,
+                lat: 17.1000,
+                lng: 100.8333,
+                severity: "MEDIUM",
+                severityText: "ปานกลาง",
+                waterLevel: 1.7,
+                damageVal: 1350,
+                households: 12500,
+                budget: 410,
+                cause: "พายุโนรูทำฝนตกหนักสะสมบนเทือกเขาภูหินร่องกล้าและชาติตระการ เกิดน้ำป่าไหลหลากลงลำน้ำแควน้อยและลำน้ำวังทอง เอ่อล้นท่วมบ้านเรือนและแปลงเกษตร",
+                impact: "สะพานเชื่อมหมู่บ้านและถนนสายหลักนครไทย-ด่านซ้ายถูกน้ำท่วมขัง พื้นที่นาข้าวเสียหายหนัก",
+                agencies: ["ปภ.", "องค์กรปกครองส่วนท้องถิ่น", "กองทัพภาคที่ 3"]
+            },
+
             // --- เชียงใหม่ (3 ครั้ง) ---
             {
                 id: 15,
@@ -1547,7 +1618,7 @@
                         </div>
                     </td>
                     <td class="p-3 font-bold text-cyan-400" onclick="openModal(${item.id})">${item.waterLevel} ม.</td>
-                    <td class="p-3 font-bold text-rose-400" onclick="openModal(${item.id})">${item.damageVal.toLocaleString()}</td>
+                    <td class="p-3 font-bold text-rose-400">${item.damageVal.toLocaleString()}</td>
                     <td class="p-3 text-slate-300" onclick="openModal(${item.id})">
                         <div class="flex flex-wrap gap-1">
                             ${item.agencies.slice(0, 2).map(a => `<span class="bg-slate-800 text-slate-300 border border-slate-700 px-1.5 py-0.5 rounded text-[9px]">${a}</span>`).join('')}
@@ -1615,7 +1686,7 @@
             document.getElementById('eventModal').classList.add('hidden');
         }
 
-        // NEW Modal Logic: Province Multi-Year Drill Down
+        // Modal Logic: Province Multi-Year Drill Down
         function openProvinceModal(provinceName) {
             const provIncidents = floodData.filter(d => d.province.includes(provinceName)).sort((a, b) => b.year - a.year);
             
