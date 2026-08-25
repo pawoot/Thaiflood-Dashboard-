@@ -85,7 +85,7 @@
                 </div>
                 <div class="flex flex-wrap gap-2">
                     <button onclick="openProvinceModal('อุบลราชธานี')" class="px-3 py-1.5 bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 border border-rose-500/50 rounded-lg text-xs font-bold transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-wheat-awn text-emerald-400"></i> อุบลราชธานี (เกษตรท่วมสะสม 1.07 ล้านไร่)
+                        <i class="fa-solid fa-wheat-awn text-emerald-400"></i> อุบลราชธานี (1.07 ล้านไร่)
                     </button>
                     <button onclick="openProvinceModal('สกลนคร')" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/40 rounded-lg text-xs font-medium transition flex items-center gap-1.5">
                         <i class="fa-solid fa-location-dot"></i> สกลนคร (850,000 ไร่)
@@ -104,6 +104,9 @@
                     </button>
                     <button onclick="openProvinceModal('สุโขทัย')" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/40 rounded-lg text-xs font-medium transition flex items-center gap-1.5">
                         <i class="fa-solid fa-location-dot"></i> สุโขทัย (333,000 ไร่)
+                    </button>
+                    <button onclick="openProvinceModal('ยะลา')" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/40 rounded-lg text-xs font-medium transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-location-dot"></i> ยะลา/ปัตตานี (48,000 ไร่)
                     </button>
                 </div>
             </div>
@@ -129,11 +132,11 @@
                     <select id="filter-year" onchange="applyFilters()" class="w-full bg-slate-900 border border-slate-700 rounded-lg text-xs text-slate-200 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
                         <option value="ALL">ทุกปี (2558 - 2568)</option>
                         <option value="2568">2568 (สงขลา / อยุธยา / นครศรีฯ)</option>
-                        <option value="2567">2567 (เชียงราย / เชียงใหม่ / น่าน / พิษณุโลก / หนองคาย / สุโขทัย)</option>
-                        <option value="2566">2566 (นราธิวาส / ปราจีนบุรี / ลำปาง)</option>
+                        <option value="2567">2567 (เชียงราย / เชียงใหม่ / น่าน / พิษณุโลก / หนองคาย / สุโขทัย / สงขลา)</option>
+                        <option value="2566">2566 (นราธิวาส / ยะลา / ปราจีนบุรี / ลำปาง)</option>
                         <option value="2565">2565 (เชียงใหม่ / อุบลฯ / อยุธยา / พิษณุโลก / กทม.)</option>
                         <option value="2564">2564 (สุโขทัย / ชัยภูมิ / โคราช)</option>
-                        <option value="2563">2563 (นครศรีธรรมราช / สุราษฎร์ฯ / ปากช่อง)</option>
+                        <option value="2563">2563 (นครศรีธรรมราช / สุราษฎร์ฯ / เลย / ปากช่อง)</option>
                         <option value="2562">2562 (อุบลฯ / ร้อยเอ็ด / พิษณุโลก-บางระกำ)</option>
                         <option value="2561">2561 (เพชรบุรี / น่าน / ตราด)</option>
                         <option value="2560">2560 (สกลนคร / นครสวรรค์ / สุโขทัย / นครศรีฯ)</option>
@@ -201,7 +204,7 @@
                 <p class="text-[11px] text-slate-400 mt-2"><i class="fa-solid fa-chart-line text-rose-400"></i> ประเมินโดย ปภ. / สทนช.</p>
             </div>
 
-            <!-- Card 2: Agricultural Land Damaged (NEW) -->
+            <!-- Card 2: Agricultural Land Damaged -->
             <div class="bg-slate-800/90 border border-emerald-500/40 rounded-xl p-4 flex flex-col justify-between shadow-lg bg-gradient-to-br from-slate-800 to-emerald-950/20">
                 <div>
                     <p class="text-xs text-emerald-300 font-medium flex items-center gap-1">
@@ -661,7 +664,7 @@
                 }
             },
 
-            // --- เชียงใหม่ & เชียงราย ---
+            // --- เชียงราย & เชียงใหม่ ---
             {
                 id: 1,
                 year: 2567,
