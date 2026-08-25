@@ -57,7 +57,7 @@
                     <h1 class="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-400 via-cyan-300 to-teal-400 bg-clip-text text-transparent">
                         แดชบอร์ดวิเคราะห์อุทกภัยประเทศไทย (2558–2568) & ฉากทัศน์ 2569
                     </h1>
-                    <p class="text-xs text-slate-400">ระบบสารสนเทศภูมิศาสตร์เชิงพื้นที่ + ฐานข้อมูลวิเคราะห์ความเสียหายด้านการเกษตรรายพืชผล</p>
+                    <p class="text-xs text-slate-400">ระบบสารสนเทศภูมิศาสตร์เชิงพื้นที่ + ฐานข้อมูลวิเคราะห์ความเสียหายด้านการเกษตรและพื้นที่ท่วมซ้ำซาก</p>
                 </div>
             </div>
             
@@ -84,29 +84,26 @@
                     <i class="fa-solid fa-fire text-sm animate-pulse"></i> ทางด่วนเจาะลึกจังหวัดท่วมซ้ำซาก (Top Hotspots):
                 </div>
                 <div class="flex flex-wrap gap-2">
-                    <button onclick="openProvinceModal('อุบลราชธานี')" class="px-3 py-1.5 bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 border border-rose-500/50 rounded-lg text-xs font-bold transition flex items-center gap-1.5">
+                    <button onclick="openProvinceModal('เชียงใหม่')" class="px-3 py-1.5 bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 border border-rose-500/50 rounded-lg text-xs font-bold transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-location-dot text-rose-400"></i> เชียงใหม่ (7 ครั้ง / 179,000 ไร่)
+                    </button>
+                    <button onclick="openProvinceModal('อุบลราชธานี')" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/40 rounded-lg text-xs font-medium transition flex items-center gap-1.5">
                         <i class="fa-solid fa-wheat-awn text-emerald-400"></i> อุบลราชธานี (1.07 ล้านไร่)
                     </button>
                     <button onclick="openProvinceModal('สกลนคร')" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/40 rounded-lg text-xs font-medium transition flex items-center gap-1.5">
                         <i class="fa-solid fa-location-dot"></i> สกลนคร (850,000 ไร่)
                     </button>
-                    <button onclick="openProvinceModal('พิษณุโลก')" class="px-3 py-1.5 bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 border border-rose-500/50 rounded-lg text-xs font-bold transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-location-dot text-rose-400"></i> พิษณุโลก (390,000 ไร่)
-                    </button>
-                    <button onclick="openProvinceModal('เชียงราย')" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/40 rounded-lg text-xs font-medium transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-location-dot"></i> เชียงราย/เชียงใหม่ (145,000 ไร่)
+                    <button onclick="openProvinceModal('พิษณุโลก')" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/40 rounded-lg text-xs font-medium transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-location-dot"></i> พิษณุโลก (452,000 ไร่)
                     </button>
                     <button onclick="openProvinceModal('พระนครศรีอยุธยา')" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/40 rounded-lg text-xs font-medium transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-location-dot"></i> อยุธยา (140,000 ไร่)
+                        <i class="fa-solid fa-location-dot"></i> อยุธยา (265,000 ไร่)
                     </button>
                     <button onclick="openProvinceModal('สงขลา')" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/40 rounded-lg text-xs font-medium transition flex items-center gap-1.5">
                         <i class="fa-solid fa-location-dot"></i> สงขลา / หาดใหญ่ (167,000 ไร่)
                     </button>
                     <button onclick="openProvinceModal('สุโขทัย')" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/40 rounded-lg text-xs font-medium transition flex items-center gap-1.5">
                         <i class="fa-solid fa-location-dot"></i> สุโขทัย (333,000 ไร่)
-                    </button>
-                    <button onclick="openProvinceModal('ยะลา')" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/40 rounded-lg text-xs font-medium transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-location-dot"></i> ยะลา/ปัตตานี (48,000 ไร่)
                     </button>
                 </div>
             </div>
@@ -132,15 +129,15 @@
                     <select id="filter-year" onchange="applyFilters()" class="w-full bg-slate-900 border border-slate-700 rounded-lg text-xs text-slate-200 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
                         <option value="ALL">ทุกปี (2558 - 2568)</option>
                         <option value="2568">2568 (สงขลา / อยุธยา / นครศรีฯ)</option>
-                        <option value="2567">2567 (เชียงราย / เชียงใหม่ / น่าน / พิษณุโลก / หนองคาย / สุโขทัย / สงขลา)</option>
-                        <option value="2566">2566 (นราธิวาส / ยะลา / ปราจีนบุรี / ลำปาง)</option>
+                        <option value="2567">2567 (เชียงใหม่ 2 ระลอก / เชียงราย / น่าน / พิษณุโลก / สุโขทัย / หนองคาย / สงขลา)</option>
+                        <option value="2566">2566 (เชียงใหม่-นิมมานฯ / นราธิวาส / ปราจีนบุรี / ลำปาง)</option>
                         <option value="2565">2565 (เชียงใหม่ / อุบลฯ / อยุธยา / พิษณุโลก / กทม.)</option>
-                        <option value="2564">2564 (สุโขทัย / ชัยภูมิ / โคราช)</option>
-                        <option value="2563">2563 (นครศรีธรรมราช / สุราษฎร์ฯ / เลย / ปากช่อง)</option>
+                        <option value="2564">2564 (เชียงใหม่-แม่แจ่ม / สุโขทัย / ชัยภูมิ / โคราช)</option>
+                        <option value="2563">2563 (นครศรีธรรมราช / สุราษฎร์ฯ / ปากช่อง)</option>
                         <option value="2562">2562 (อุบลฯ / ร้อยเอ็ด / พิษณุโลก-บางระกำ)</option>
-                        <option value="2561">2561 (เพชรบุรี / น่าน / ตราด)</option>
+                        <option value="2561">2561 (เชียงใหม่-ฝาง / เพชรบุรี / น่าน / ตราด)</option>
                         <option value="2560">2560 (สกลนคร / นครสวรรค์ / สุโขทัย / นครศรีฯ)</option>
-                        <option value="2559">2559 (เชียงใหม่ / ระยอง / กทม.)</option>
+                        <option value="2559">2559 (เชียงใหม่-อินทนนท์ / ระยอง / กทม.)</option>
                         <option value="2558">2558 (ตาก-แม่สอด / พิจิตร-สามง่าม)</option>
                     </select>
                 </div>
@@ -186,14 +183,14 @@
                 <div>
                     <label class="block text-xs font-medium text-slate-400 mb-1">ค้นหาพื้นที่/พืชผล/อำเภอ</label>
                     <div class="relative">
-                        <input type="text" id="filter-search" oninput="applyFilters()" placeholder="เช่น นาข้าว, ลำไย, บางระกำ, อุบล..." class="w-full bg-slate-900 border border-slate-700 rounded-lg text-xs text-slate-200 pl-8 pr-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <input type="text" id="filter-search" oninput="applyFilters()" placeholder="เช่น เชียงใหม่, ลำไย, ช้างคลาน, สารภี..." class="w-full bg-slate-900 border border-slate-700 rounded-lg text-xs text-slate-200 pl-8 pr-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
                         <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-500 text-xs"></i>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- KPI Metrics Overview (Expanded to 5 Cards Grid) -->
+        <!-- KPI Metrics Overview Grid -->
         <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             <!-- Card 1: Economic Damage -->
             <div class="bg-slate-800/90 border border-slate-700/60 rounded-xl p-4 flex flex-col justify-between shadow-lg">
@@ -259,7 +256,7 @@
                 </div>
                 <div id="map" class="w-full h-[430px] rounded-xl border border-slate-700/80"></div>
                 <p class="text-[11px] text-slate-400 mt-2 italic">
-                    * คลิกที่หมุดบนแผนที่เพื่อดูรายละเอียดเชิงลึก (รวมถึงความเสียหายด้านเกษตรรายชนิดพืชผลและพื้นที่ไร่)
+                    * คลิกที่หมุดบนแผนที่เพื่อดูรายละเอียดเชิงลึก (รวมถึงความเสียหายด้านเกษตรและประวัติรายปีของจังหวัดนั้น)
                 </p>
             </div>
 
@@ -283,6 +280,35 @@
                     <div class="flex-1 min-h-[160px] relative">
                         <canvas id="trendChart"></canvas>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Province Recurrence & Comparative Ranking Charts Section -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Chart 1: Top Recurrent Flood Provinces Ranking -->
+            <div class="bg-slate-800/80 border border-rose-500/30 rounded-2xl p-4 shadow-xl flex flex-col">
+                <div class="flex items-center justify-between mb-3 border-b border-slate-700/50 pb-2">
+                    <h3 class="text-sm font-semibold text-rose-300 flex items-center gap-2">
+                        <i class="fa-solid fa-fire text-rose-400 animate-pulse"></i> ลำดับจังหวัดที่มีอุทกภัยซ้ำซากมากที่สุด (Province Recurrence Ranking)
+                    </h3>
+                    <span class="text-[10px] text-slate-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-700">เรียงตามจำนวนครั้งที่บันทึก</span>
+                </div>
+                <div class="h-[260px] relative">
+                    <canvas id="freqChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Chart 2: Economic & Agricultural Damage Comparison by Province -->
+            <div class="bg-slate-800/80 border border-amber-500/30 rounded-2xl p-4 shadow-xl flex flex-col">
+                <div class="flex items-center justify-between mb-3 border-b border-slate-700/50 pb-2">
+                    <h3 class="text-sm font-semibold text-amber-300 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-bar text-amber-400"></i> เปรียบเทียบมูลค่าความเสียหายและพื้นที่เกษตรเสียหายรายจังหวัด
+                    </h3>
+                    <span class="text-[10px] text-slate-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-700">ล้านบาท & พันไร่</span>
+                </div>
+                <div class="h-[260px] relative">
+                    <canvas id="provinceDamageChart"></canvas>
                 </div>
             </div>
         </section>
@@ -368,7 +394,7 @@
                         <span>ฉากทัศน์ที่ 3: น้ำป่าหลาก & ดินโคลนถล่ม</span>
                         <i class="fa-solid fa-hill-rockslide"></i>
                     </div>
-                    <h4 class="text-sm font-semibold text-slate-200">พื้นที่เสี่ยงสูง: เทือกเขาภาคเหนือ (เชียงราย/น่าน/พิษณุโลก) & อันดามัน</h4>
+                    <h4 class="text-sm font-semibold text-slate-200">พื้นที่เสี่ยงสูง: เทือกเขาภาคเหนือ (เชียงใหม่/เชียงราย/น่าน) & อันดามัน</h4>
                     <p class="text-[11px] text-slate-400 leading-relaxed">
                         ความอุ้มน้ำของดินบนเขาดอยเริ่มลดลงเนื่องจากการใช้ประโยชน์ที่ดิน หากมีพายุหมุนทราปิกัลเข้าปะทะ 1-2 ลูก เสี่ยงต่อการเกิดโคลนถล่มซ้ำรอยปี 2567
                     </p>
@@ -392,17 +418,17 @@
                         <span class="px-2.5 py-1 rounded bg-rose-500/20 text-rose-400 border border-rose-500/30 font-bold text-xs flex items-center gap-1">
                             <i class="fa-solid fa-fire text-xs"></i> รายงานวิเคราะห์ท่วมซ้ำซาก
                         </span>
-                        <h2 id="prov-modal-title" class="text-xl font-bold text-slate-100">เจาะลึกประวัติอุทกภัย จ.พิษณุโลก</h2>
+                        <h2 id="prov-modal-title" class="text-xl font-bold text-slate-100">เจาะลึกประวัติอุทกภัย จ.เชียงใหม่</h2>
                     </div>
                     <p class="text-xs text-slate-400 mt-1">สรุปวงรอบเหตุการณ์ ระดับน้ำสูงสุด มูลค่าความเสียหายสะสม และผลกระทบด้านการเกษตรรายปี</p>
                 </div>
                 <div class="bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700 text-right">
                     <span class="text-[10px] text-slate-400 block uppercase">ความถี่เหตุการณ์ที่บันทึก</span>
-                    <strong id="prov-modal-count" class="text-rose-400 text-lg font-bold">3 ครั้ง / 11 ปี</strong>
+                    <strong id="prov-modal-count" class="text-rose-400 text-lg font-bold">7 ครั้ง / 11 ปี</strong>
                 </div>
             </div>
 
-            <!-- Summary KPI Grid for this Province (Updated to include Agri) -->
+            <!-- Summary KPI Grid for this Province -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-800/80 p-3.5 rounded-xl border border-slate-700/60 text-xs">
                 <div>
                     <span class="text-slate-400 block">ความเสียหายสะสมรวม</span>
@@ -566,6 +592,234 @@
     <script>
         // Comprehensive Multi-Year Dataset (2558 - 2568) enriched with AgriDamage Schema
         const floodData = [
+            // ==========================================
+            // --- จ.เชียงใหม่ (ครบถ้วนทั้ง 7 เหตุการณ์) ---
+            // ==========================================
+            {
+                id: 151,
+                year: 2567,
+                province: "เชียงใหม่",
+                district: "เมืองเชียงใหม่ / สารภี / แม่แตง",
+                subdistrict: "ช้างคลาน, ป่าแดด, หนองผึ้ง, แม่แตง",
+                region: "NORTH",
+                type: "RIVER",
+                typeName: "น้ำเอ่อล้นตลิ่ง (แม่น้ำปิง วิกฤติ P.1 5.30 ม.)",
+                isHotspot: true,
+                lat: 18.7883,
+                lng: 98.9853,
+                severity: "CRITICAL",
+                severityText: "วิกฤติต่างระดับ",
+                waterLevel: 2.5,
+                damageVal: 4800,
+                households: 42000,
+                budget: 1600,
+                cause: "แม่น้ำปิงเอ่อล้นระดับคันกั้นน้ำวิกฤติที่จุด P.1 (สะพานนวรัตน์) สูงทะลุ 5.30 เมตร ทุบสถิติประวัติศาสตร์ ปริมาณน้ำจากแม่แตงและเชียงดาวไหลทะลักย่านเศรษฐกิจช้างคลาน สารภี และปางช้างแม่แตง",
+                impact: "ย่านการค้าช้างคลาน ไนท์บาซาร์ และ อ.สารภี จมน้ำนานกว่า 1 สัปดาห์ ปางช้างแม่แตงได้รับผลกระทบหนัก",
+                agencies: ["ปภ.", "เทศบาลนครเชียงใหม่", "กองทัพบก", "กรมชลประทาน", "อบจ.เชียงใหม่"],
+                agriDamage: {
+                    totalRai: 45000,
+                    riceRai: 25000,
+                    fieldCropRai: 8000,
+                    orchardRai: 12000,
+                    affectedFarmers: 8500,
+                    estAgriCompensation: 95,
+                    mainCrops: "ลำไย, ข้าวนาปี, พืชผัก",
+                    damageChar: "น้ำปิงล้นตลิ่งท่วมขังสวนลำไยและแปลงนาแช่ขังนานกว่า 10 วัน"
+                }
+            },
+            {
+                id: 152,
+                year: 2567,
+                province: "เชียงใหม่",
+                district: "ฝาง / แม่อาย / เชียงดาว",
+                subdistrict: "เวียง, แม่อาย, เชียงดาว",
+                region: "NORTH",
+                type: "FLASH",
+                typeName: "ดินโคลนถล่ม & น้ำป่าหลาก (ยางิ)",
+                isHotspot: true,
+                lat: 19.9167,
+                lng: 99.2167,
+                severity: "CRITICAL",
+                severityText: "วิกฤติต่างระดับ",
+                waterLevel: 2.8,
+                damageVal: 2100,
+                households: 18000,
+                budget: 750,
+                cause: "อิทธิพลพายุยางิ ฝนตกหนักบนเทือกเขาเชิงดอย ทำให้น้ำป่าพัดดินโคลนถล่มทะลักท่วมพื้นที่ อ.ฝาง อ.แม่อาย และ อ.เชียงดาว",
+                impact: "ดินโคลนถล่มปิดทับหมู่บ้านเชิงเขา สวนส้มสายน้ำผึ้งฝางและพืชไร่เสียหายหนัก",
+                agencies: ["ปภ.", "กองทัพภาคที่ 3", "กรมชลประทาน", "อบจ.เชียงใหม่"],
+                agriDamage: {
+                    totalRai: 38000,
+                    riceRai: 12000,
+                    fieldCropRai: 11000,
+                    orchardRai: 15000,
+                    affectedFarmers: 6800,
+                    estAgriCompensation: 80,
+                    mainCrops: "สวนส้มสายน้ำผึ้ง, ข้าวโพด, ข้าวหุบเขา",
+                    damageChar: "ตะกอนดินโคลนพัดเซาะโคนต้นส้มและพืชไร่รากขาดอากาศ"
+                }
+            },
+            {
+                id: 153,
+                year: 2566,
+                province: "เชียงใหม่",
+                district: "เมืองเชียงใหม่ / จอมทอง / ฮอด / สันป่าตอง",
+                subdistrict: "สุเทพ, นิมมานฯ, ช่างเคิ่ง, ฮอด",
+                region: "NORTH",
+                type: "FLASH",
+                typeName: "น้ำป่าดอยสุเทพ & น้ำขังรอระบาย",
+                isHotspot: true,
+                lat: 18.7900,
+                lng: 98.9600,
+                severity: "MEDIUM",
+                severityText: "ปานกลาง",
+                waterLevel: 1.4,
+                damageVal: 950,
+                households: 12000,
+                budget: 320,
+                cause: "ฝนตกหนักสะสมบนดอยสุเทพและลุ่มน้ำกวง/ขาน เกิดน้ำป่าทะลักลงห้วยแก้วท่วมย่านนิมมานฯ กาดสวนแก้ว และน้ำป่าหลากท่วม อ.จอมทอง อ.ฮอด",
+                impact: "น้ำขังย่านเศรษฐกิจเมืองเชียงใหม่ฉับพลัน และพื้นที่สวนลำไยจอมทองท่วมขัง",
+                agencies: ["ปภ.", "เทศบาลนครเชียงใหม่", "อุทยานแห่งชาติดอยสุเทพ-ปุย"],
+                agriDamage: {
+                    totalRai: 18000,
+                    riceRai: 6000,
+                    fieldCropRai: 4000,
+                    orchardRai: 8000,
+                    affectedFarmers: 3500,
+                    estAgriCompensation: 38,
+                    mainCrops: "สวนลำไย, พืชผักสวนครัว",
+                    damageChar: "น้ำป่าไหลหลากฉับพลันกัดเซาะหน้าดินแปลงเกษตร"
+                }
+            },
+            {
+                id: 154,
+                year: 2565,
+                province: "เชียงใหม่",
+                district: "เมืองเชียงใหม่ / สารภี / แม่ริม",
+                subdistrict: "ช้างคลาน, ป่าแดด, หนองผึ้ง, ริมเหนือ",
+                region: "NORTH",
+                type: "RIVER",
+                typeName: "น้ำปิงล้นตลิ่ง (พายุโนรู P.1 4.65 ม.)",
+                isHotspot: true,
+                lat: 18.7850,
+                lng: 98.9880,
+                severity: "HIGH",
+                severityText: "รุนแรงมาก",
+                waterLevel: 1.9,
+                damageVal: 2800,
+                households: 25000,
+                budget: 850,
+                cause: "อิทธิพลพายุโนรู ฝนตกหนักตอนบนลุ่มน้ำปิง เอ่อล้นระดับ P.1 สะพานนวรัตน์ สูง 4.65 เมตร ทะลักท่วมย่านไนท์บาซาร์และพื้นที่ลุ่มต่ำ อ.สารภี",
+                impact: "ย่านการค้าช้างคลานและ อ.สารภี ท่วมขัง 3-5 วัน โรงเรียนและร้านค้าหยุดให้บริการ",
+                agencies: ["ปภ.", "เทศบาลนครเชียงใหม่", "กรมชลประทาน", "กองทัพภาคที่ 3"],
+                agriDamage: {
+                    totalRai: 32000,
+                    riceRai: 15000,
+                    fieldCropRai: 5000,
+                    orchardRai: 12000,
+                    affectedFarmers: 5900,
+                    estAgriCompensation: 65,
+                    mainCrops: "นาข้าว, ไม้ผลยืนต้น (ลำไย)",
+                    damageChar: "น้ำปิงเอ่อล้นท่วมขังสวนลำไยและนาข้าวริมตลิ่ง"
+                }
+            },
+            {
+                id: 155,
+                year: 2564,
+                province: "เชียงใหม่",
+                district: "แม่แจ่ม / ดอยเต่า / สันป่าตอง",
+                subdistrict: "ช่างเคิ่ง, ดอยเต่า, สันป่าตอง",
+                region: "NORTH",
+                type: "RIVER",
+                typeName: "น้ำแม่แจ่ม & ปิงตอนล่างเอ่อล้น (เตียนหมู่)",
+                isHotspot: true,
+                lat: 18.3000,
+                lng: 98.3700,
+                severity: "MEDIUM",
+                severityText: "ปานกลาง",
+                waterLevel: 1.6,
+                damageVal: 1100,
+                households: 11000,
+                budget: 380,
+                cause: "อิทธิพลพายุเตียนหมู่ ทำให้น้ำแม่แจ่มและน้ำปิงตอนล่างเอ่อล้นตลิ่งท่วมพื้นที่ลุ่มต่ำ อ.แม่แจ่ม อ.ดอยเต่า และ อ.สันป่าตอง",
+                impact: "พื้นที่เกษตรกรรมไร่ข้าวโพดและนาข้าวริมน้ำถูกน้ำหลากท่วมขัง",
+                agencies: ["ปภ.", "กรมชลประทาน", "อบจ.เชียงใหม่"],
+                agriDamage: {
+                    totalRai: 24000,
+                    riceRai: 10000,
+                    fieldCropRai: 11000,
+                    orchardRai: 3000,
+                    affectedFarmers: 4200,
+                    estAgriCompensation: 45,
+                    mainCrops: "ข้าวโพดเลี้ยงสัตว์, ข้าวนาปี",
+                    damageChar: "ลำน้ำแม่แจ่มเอ่อล้นท่วมแปลงข้าวโพดหัวเน่าเสียหาย"
+                }
+            },
+            {
+                id: 156,
+                year: 2561,
+                province: "เชียงใหม่",
+                district: "ฝาง / แม่อาย / เชียงดาว",
+                subdistrict: "เวียง, แม่อาย, เมืองงาย",
+                region: "NORTH",
+                type: "FLASH",
+                typeName: "น้ำป่าไหลหลาก (พายุเบบินคา)",
+                isHotspot: true,
+                lat: 19.8000,
+                lng: 99.1000,
+                severity: "MEDIUM",
+                severityText: "ปานกลาง",
+                waterLevel: 1.8,
+                damageVal: 850,
+                households: 9500,
+                budget: 290,
+                cause: "พายุเบบินคาทำฝนตกหนักทิวเขาผีพานและดอยผ้าห่มปก น้ำป่าไหลหลากฉับพลันลงสู่ลำน้ำฝางและแม่น้ำกก",
+                impact: "สวนส้มสายน้ำผึ้ง อ.ฝาง และพื้นที่เกษตรลาดเชิงเขาถูกน้ำป่าพัดเซาะหน้าดิน",
+                agencies: ["ปภ.", "อบจ.เชียงใหม่", "ทหารพราน"],
+                agriDamage: {
+                    totalRai: 21000,
+                    riceRai: 7000,
+                    fieldCropRai: 6000,
+                    orchardRai: 8000,
+                    affectedFarmers: 3800,
+                    estAgriCompensation: 38,
+                    mainCrops: "สวนส้มสายน้ำผึ้ง, พืชไร่",
+                    damageChar: "น้ำป่าพัดพาหน้าดินและผลผลิตส้มสุกเสียหาย"
+                }
+            },
+            {
+                id: 157,
+                year: 2559,
+                province: "เชียงใหม่",
+                district: "จอมทอง / ฮอด / แม่วาง",
+                subdistrict: "บ้านหลวง, หางดง, บ้านการ้อง",
+                region: "NORTH",
+                type: "FLASH",
+                typeName: "น้ำป่าอินทนนท์ & แม่น้ำแจ่มหลาก",
+                isHotspot: true,
+                lat: 18.5300,
+                lng: 98.6700,
+                severity: "MEDIUM",
+                severityText: "ปานกลาง",
+                waterLevel: 1.4,
+                damageVal: 1200,
+                households: 11000,
+                budget: 380,
+                cause: "ฝนตกหนักสะสมบนเทือกเขาดอยอินทนนท์ น้ำป่าหลากลงน้ำแม่กลางและแม่น้ำแจ่ม เอ่อล้นท่วม อ.จอมทอง อ.ฮอด และ อ.แม่วาง",
+                impact: "สวนลำไยและแปลงพืชผักเชิงเขาถูกน้ำป่าทะลักท่วมขัง",
+                agencies: ["ปภ.", "อุทยานแห่งชาติดอยอินทนนท์", "อบต.บ้านหลวง"],
+                agriDamage: {
+                    totalRai: 22000,
+                    riceRai: 8000,
+                    fieldCropRai: 4000,
+                    orchardRai: 10000,
+                    affectedFarmers: 4100,
+                    estAgriCompensation: 40,
+                    mainCrops: "สวนลำไย, แปลงพืชผัก",
+                    damageChar: "น้ำป่าไหลหลากท่วมขังสวนลำไยและพืชผัก"
+                }
+            },
+
             // --- พิษณุโลก ---
             {
                 id: 231,
@@ -664,7 +918,7 @@
                 }
             },
 
-            // --- เชียงราย & เชียงใหม่ ---
+            // --- เชียงราย ---
             {
                 id: 1,
                 year: 2567,
@@ -695,38 +949,6 @@
                     estAgriCompensation: 280,
                     mainCrops: "ข้าว, ข้าวโพด, ลำไย, ส้ม",
                     damageChar: "ตะกอนดินโคลนทับถมแปลงเกษตรสูง 1–2 ม. ต้นไม้ผลยืนต้นตายรากขาดอากาศ"
-                }
-            },
-            {
-                id: 15,
-                year: 2567,
-                province: "เชียงใหม่",
-                district: "เมืองเชียงใหม่ / สารภี / หางดง / ฝาง",
-                subdistrict: "ช้างคลาน, ป่าแดด, หนองผึ้ง",
-                region: "NORTH",
-                type: "RIVER",
-                typeName: "น้ำเอ่อล้นตลิ่ง (แม่น้ำปิง)",
-                isHotspot: true,
-                lat: 18.7883,
-                lng: 98.9853,
-                severity: "CRITICAL",
-                severityText: "วิกฤติต่างระดับ",
-                waterLevel: 2.5,
-                damageVal: 4800,
-                households: 42000,
-                budget: 1600,
-                cause: "แม่น้ำปิงเอ่อล้นระดับคันกั้นน้ำวิกฤติที่จุด P.1 (สะพานนวรัตน์) สูงทะลุ 5.30 เมตร ทุบสถิติประวัติศาสตร์ ปริมาณน้ำจากแม่แตงและเชียงดาวไหลทะลักย่านเศรษฐกิจช้างคลานและ อ.สารภี",
-                impact: "ย่านการค้าช้างคลาน ไนท์บาซาร์ และ อ.สารภี จมน้ำนานกว่า 1 สัปดาห์ ปางช้างแม่แตงได้รับผลกระทบหนัก",
-                agencies: ["ปภ.", "เทศบาลนครเชียงใหม่", "กองทัพบก", "กรมชลประทาน", "อบจ.เชียงใหม่"],
-                agriDamage: {
-                    totalRai: 92000,
-                    riceRai: 51000,
-                    fieldCropRai: 16000,
-                    orchardRai: 25000,
-                    affectedFarmers: 16800,
-                    estAgriCompensation: 195,
-                    mainCrops: "สวนลำไย, ส้มฝาง, นาข้าว, พืชผักสวนครัว",
-                    damageChar: "น้ำปิงเอ่อล้นท่วมขังสวนลำไยและสวนส้มฝางนานกว่า 10 วัน ดินโคลนทับหน้าดิน"
                 }
             },
 
@@ -1506,6 +1728,8 @@
         let regionChartInstance = null;
         let cropChartInstance = null;
         let provinceChartInstance = null;
+        let freqChartInstance = null;
+        let provinceDamageChartInstance = null;
 
         // Init App
         document.addEventListener("DOMContentLoaded", function () {
@@ -1703,6 +1927,119 @@
                     },
                     scales: {
                         x: { ticks: { color: '#94a3b8', font: { family: 'Kanit', size: 9 } }, grid: { color: '#1e293b' } },
+                        y: { ticks: { color: '#94a3b8', font: { family: 'Kanit', size: 9 } }, grid: { color: '#1e293b' } }
+                    }
+                }
+            });
+
+            // 3. Frequency Chart (Top Recurrent Flood Provinces Ranking)
+            const provFreqMap = {};
+            data.forEach(item => {
+                const prov = item.province;
+                provFreqMap[prov] = (provFreqMap[prov] || 0) + 1;
+            });
+
+            const sortedFreq = Object.entries(provFreqMap)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 10);
+
+            const freqLabels = sortedFreq.map(item => item[0]);
+            const freqData = sortedFreq.map(item => item[1]);
+
+            const ctxFreq = document.getElementById('freqChart').getContext('2d');
+            if (freqChartInstance) freqChartInstance.destroy();
+
+            freqChartInstance = new Chart(ctxFreq, {
+                type: 'bar',
+                data: {
+                    labels: freqLabels,
+                    datasets: [{
+                        label: 'จำนวนครั้งที่เกิดอุทกภัย (ครั้ง)',
+                        data: freqData,
+                        backgroundColor: freqData.map(val => val >= 4 ? 'rgba(244, 63, 94, 0.85)' : val >= 3 ? 'rgba(245, 158, 11, 0.85)' : 'rgba(59, 130, 246, 0.85)'),
+                        borderColor: freqData.map(val => val >= 4 ? '#f43f5e' : val >= 3 ? '#f59e0b' : '#3b82f6'),
+                        borderWidth: 1,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => ` เกิดอุทกภัยบันทึก ${context.raw} ครั้ง`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { 
+                            ticks: { color: '#94a3b8', stepSize: 1, font: { family: 'Kanit', size: 10 } }, 
+                            grid: { color: '#1e293b' } 
+                        },
+                        y: { 
+                            ticks: { color: '#f8fafc', font: { family: 'Kanit', size: 11, weight: 'bold' } }, 
+                            grid: { display: false } 
+                        }
+                    }
+                }
+            });
+
+            // 4. Province Damage & Agri Rai Comparison Chart
+            const provDamageMap = {};
+            data.forEach(item => {
+                const prov = item.province;
+                if (!provDamageMap[prov]) {
+                    provDamageMap[prov] = { damage: 0, agriRai: 0 };
+                }
+                provDamageMap[prov].damage += item.damageVal || 0;
+                provDamageMap[prov].agriRai += item.agriDamage ? (item.agriDamage.totalRai / 1000) : 0;
+            });
+
+            const sortedProvDamage = Object.entries(provDamageMap)
+                .sort((a, b) => b[1].damage - a[1].damage)
+                .slice(0, 10);
+
+            const damageProvLabels = sortedProvDamage.map(item => item[0]);
+            const damageProvData = sortedProvDamage.map(item => item[1].damage);
+            const agriProvData = sortedProvDamage.map(item => Math.round(item[1].agriRai));
+
+            const ctxProvDamage = document.getElementById('provinceDamageChart').getContext('2d');
+            if (provinceDamageChartInstance) provinceDamageChartInstance.destroy();
+
+            provinceDamageChartInstance = new Chart(ctxProvDamage, {
+                type: 'bar',
+                data: {
+                    labels: damageProvLabels,
+                    datasets: [
+                        {
+                            label: 'มูลค่าความเสียหาย (ล้านบาท)',
+                            data: damageProvData,
+                            backgroundColor: 'rgba(244, 63, 94, 0.8)',
+                            borderColor: '#f43f5e',
+                            borderWidth: 1,
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'พื้นที่เกษตรเสียหาย (พันไร่)',
+                            data: agriProvData,
+                            backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                            borderColor: '#10b981',
+                            borderWidth: 1,
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#94a3b8', font: { family: 'Kanit', size: 10 } } }
+                    },
+                    scales: {
+                        x: { ticks: { color: '#94a3b8', font: { family: 'Kanit', size: 10 } }, grid: { color: '#1e293b' } },
                         y: { ticks: { color: '#94a3b8', font: { family: 'Kanit', size: 9 } }, grid: { color: '#1e293b' } }
                     }
                 }
