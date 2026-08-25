@@ -46,7 +46,6 @@
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <!-- Header Navigation -->
     <header class="bg-slate-900/95 border-b border-slate-800 sticky top-0 z-50 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
@@ -608,6 +607,234 @@
         // Comprehensive Multi-Year Dataset (2558 - 2568) enriched with AgriDamage Schema
         const floodData = [
             // ==========================================
+            // --- จ.เชียงใหม่ (ครบถ้วนทั้ง 7 เหตุการณ์) ---
+            // ==========================================
+            {
+                id: 151,
+                year: 2567,
+                province: "เชียงใหม่",
+                district: "เมืองเชียงใหม่ / สารภี / แม่แตง",
+                subdistrict: "ช้างคลาน, ป่าแดด, หนองผึ้ง, กึ้ดช้าง",
+                region: "NORTH",
+                type: "RIVER",
+                typeName: "น้ำปิงล้นตลิ่งวิกฤติประวัติศาสตร์ (P.1 = 5.30 ม.)",
+                isHotspot: true,
+                lat: 18.7883,
+                lng: 98.9853,
+                severity: "CRITICAL",
+                severityText: "วิกฤติต่างระดับ",
+                waterLevel: 5.3,
+                damageVal: 4800,
+                households: 42000,
+                budget: 1600,
+                cause: "มวลน้ำหลากจากแม่แตงและเชียงดาวไหลสมทบ ทำให้น้ำปิงที่จุด P.1 (สะพานนวรัตน์) สูงทะลุสถิติประวัติศาสตร์ที่ 5.30 เมตร เอ่อล้นคันกั้นน้ำทะลักท่วมย่านช้างคลาน ไนท์บาซาร์ และ อ.สารภี ลึกกว่า 1.5-2.0 เมตร",
+                impact: "ย่านการค้าช้างคลานจมน้ำนานกว่า 1 สัปดาห์ ปางช้างแม่แตงถูกน้ำพัดพาสัตว์สูญเสีย พื้นที่เกษตรลำไยสารภีเสียหายหนัก",
+                agencies: ["ปภ.", "เทศบาลนครเชียงใหม่", "กองทัพบก", "กรมชลประทาน", "อบจ.เชียงใหม่"],
+                agriDamage: {
+                    totalRai: 45000,
+                    riceRai: 18000,
+                    fieldCropRai: 7000,
+                    orchardRai: 20000,
+                    affectedFarmers: 8900,
+                    estAgriCompensation: 85,
+                    mainCrops: "สวนลำไย, ข้าวนาปี, พืชผักสวนครัว",
+                    damageChar: "น้ำปิงล้นตลิ่งขังในแปลงสวนลำไย อ.สารภี นานกว่า 10 วัน โคนต้นเน่า"
+                }
+            },
+            {
+                id: 152,
+                year: 2567,
+                province: "เชียงใหม่",
+                district: "แม่อาย / ฝาง / เชียงดาว",
+                subdistrict: "ดอยแหลม, แม่อาย, เวียง",
+                region: "NORTH",
+                type: "FLASH",
+                typeName: "ดินโคลนถล่ม & น้ำป่าหลาก (พายุยางิ)",
+                isHotspot: true,
+                lat: 20.0333,
+                lng: 99.2833,
+                severity: "CRITICAL",
+                severityText: "วิกฤติต่างระดับ",
+                waterLevel: 2.8,
+                damageVal: 2100,
+                households: 22000,
+                budget: 720,
+                cause: "อิทธิพลพายุยางิทำฝนตกหนักทุบสถิติบนทิวเขาฝาง-แม่อาย เกิดดินโคลนถล่มกวาดหมู่บ้านดอยแหลม และน้ำป่าทะลักลำน้ำกกและลำน้ำฝาง",
+                impact: "มีผู้เสียชีวิตและสูญหายจากดินโคลนถล่ม สวนส้มสายน้ำผึ้งและนาข้าวหุบเขาถูกโคลนทับถมสูง 1-2 เมตร",
+                agencies: ["ปภ.", "กองทัพภาคที่ 3", "มูลนิธิกระจกเงา", "กรมทรัพยากรธรณี"],
+                agriDamage: {
+                    totalRai: 38000,
+                    riceRai: 15000,
+                    fieldCropRai: 8000,
+                    orchardRai: 15000,
+                    affectedFarmers: 6200,
+                    estAgriCompensation: 68,
+                    mainCrops: "สวนส้มสายน้ำผึ้ง, ข้าวโพด, ข้าวหุบเขา",
+                    damageChar: "ตะกอนดินโคลนถล่มทับถมแปลงส้มและนาข้าวเชิงเขา ยืนต้นตาย"
+                }
+            },
+            {
+                id: 153,
+                year: 2566,
+                province: "เชียงใหม่",
+                district: "เมืองเชียงใหม่ / จอมทอง / ฮอด / สันป่าตอง",
+                subdistrict: "สุเทพ, ช้างเผือก, บ้านหลวง, หางดง",
+                region: "NORTH",
+                type: "URBAN",
+                typeName: "น้ำป่าดอยสุเทพ & ลุ่มน้ำกวง/ขาน",
+                isHotspot: true,
+                lat: 18.8000,
+                lng: 98.9600,
+                severity: "MEDIUM",
+                severityText: "ปานกลาง",
+                waterLevel: 1.4,
+                damageVal: 950,
+                households: 14000,
+                budget: 310,
+                cause: "ฝนตกหนักสะสมบนเทือกเขาดอยสุเทพ ทำให้น้ำห้วยแก้วไหลทะลักท่วมย่านนิมมานฯ กาดสวนแก้ว ร่วมกับน้ำป่าไหลหลากลงลำน้ำขานและลำน้ำวางท่วม อ.จอมทอง และ อ.ฮอด",
+                impact: "ย่านท่องเที่ยวท่องเที่ยวเมืองเชียงใหม่น้ำท่วมขังฉับพลัน 5-8 ชม. พื้นที่สวนลำไยจอมทองและฮอดถูกน้ำป่าหลากท่วม",
+                agencies: ["ปภ.", "เทศบาลนครเชียงใหม่", "อบจ.เชียงใหม่"],
+                agriDamage: {
+                    totalRai: 18000,
+                    riceRai: 6000,
+                    fieldCropRai: 4000,
+                    orchardRai: 8000,
+                    affectedFarmers: 3500,
+                    estAgriCompensation: 28,
+                    mainCrops: "สวนลำไย, พืชผัก",
+                    damageChar: "น้ำป่าพัดเซาะหน้าดินแปลงสตรอว์เบอร์รีและสวนลำไยริมแม่น้ำ"
+                }
+            },
+            {
+                id: 154,
+                year: 2565,
+                province: "เชียงใหม่",
+                district: "เมืองเชียงใหม่ / สารภี / แม่ริม",
+                subdistrict: "ช้างคลาน, ป่าแดด, ริมเหนือ",
+                region: "NORTH",
+                type: "RIVER",
+                typeName: "น้ำปิงล้นตลิ่ง (พายุโนรู, P.1 = 4.65 ม.)",
+                isHotspot: true,
+                lat: 18.7800,
+                lng: 98.9800,
+                severity: "HIGH",
+                severityText: "รุนแรงมาก",
+                waterLevel: 4.65,
+                damageVal: 2800,
+                households: 31000,
+                budget: 850,
+                cause: "อิทธิพลพายุโนรู ดันระดับน้ำปิงที่สะพานนวรัตน์ขึ้นสูง 4.65 เมตร เอ่อล้นทะลักเข้าท่วมเขตเทศบาลนครเชียงใหม่ ย่านไนท์บาซาร์ และ อ.สารภี",
+                impact: "ย่านการค้าช้างคลานและโรงเรียนหลายแห่งต้องสั่งหยุดเรียน ชุมชนริมแม่น้ำปิงท่วมขังสูง 1 เมตร นาน 4 วัน",
+                agencies: ["ปภ.", "เทศบาลนครเชียงใหม่", "กรมชลประทาน", "กองทัพบก"],
+                agriDamage: {
+                    totalRai: 32000,
+                    riceRai: 14000,
+                    fieldCropRai: 6000,
+                    orchardRai: 12000,
+                    affectedFarmers: 5800,
+                    estAgriCompensation: 52,
+                    mainCrops: "นาข้าว, ไม้ผลยืนต้น (ลำไย/หมาก)",
+                    damageChar: "น้ำปิงเอ่อท่วมแปลงนาข้าวที่กำลังตั้งท้องมิดรวง"
+                }
+            },
+            {
+                id: 155,
+                year: 2564,
+                province: "เชียงใหม่",
+                district: "แม่แจ่ม / ดอยเต่า / สันป่าตอง",
+                subdistrict: "ช่างเคิ่ง, ท่ากระดาน",
+                region: "NORTH",
+                type: "FLASH",
+                typeName: "น้ำแม่แจ่ม & ลำน้ำปิงตอนล่าง",
+                isHotspot: true,
+                lat: 18.5000,
+                lng: 98.3600,
+                severity: "MEDIUM",
+                severityText: "ปานกลาง",
+                waterLevel: 1.6,
+                damageVal: 1100,
+                households: 12500,
+                budget: 360,
+                cause: "อิทธิพลพายุเตียนหมู่ ทำให้น้ำแม่แจ่มและน้ำแม่แตงหลากท่วมพื้นที่ลุ่มต่ำ อ.แม่แจ่ม อ.ดอยเต่า และไหลลงเขื่อนภูมิพล",
+                impact: "พื้นที่เกษตรกรรมสวนลำไยและแปลงข้าวโพดเลี้ยงสัตว์บนพื้นที่ลาดเชิงเขาจมน้ำเสียหาย",
+                agencies: ["ปภ.", "อบจ.เชียงใหม่", "อบต.ช่างเคิ่ง"],
+                agriDamage: {
+                    totalRai: 24000,
+                    riceRai: 9000,
+                    fieldCropRai: 11000,
+                    orchardRai: 4000,
+                    affectedFarmers: 4100,
+                    estAgriCompensation: 35,
+                    mainCrops: "ข้าวโพดเลี้ยงสัตว์, ข้าวไร่",
+                    damageChar: "น้ำป่าพัดเซาะแปลงข้าวโพดเชิงเขาเสียหาย"
+                }
+            },
+            {
+                id: 156,
+                year: 2561,
+                province: "เชียงใหม่",
+                district: "ฝาง / แม่อาย / เชียงดาว",
+                subdistrict: "เวียง, แม่สูน, ม่อนปิน",
+                region: "NORTH",
+                type: "FLASH",
+                typeName: "น้ำป่าไหลหลาก (พายุเบบินคา)",
+                isHotspot: true,
+                lat: 19.9167,
+                lng: 99.2167,
+                severity: "MEDIUM",
+                severityText: "ปานกลาง",
+                waterLevel: 1.8,
+                damageVal: 850,
+                households: 9800,
+                budget: 290,
+                cause: "พายุเบบินคาทำฝนตกหนักในทิวเขาผีปั้นน้ำ น้ำป่าหลากท่วม อ.ฝาง อ.แม่อาย และ อ.เชียงดาว ฉับพลัน",
+                impact: "สวนส้มสายน้ำผึ้งฝางจมน้ำขัง ถนนสายหลักเชียงใหม่-ฝางมีน้ำท่วมขังชั่วคราว",
+                agencies: ["ปภ.", "อบจ.เชียงใหม่", "ทหารพราน"],
+                agriDamage: {
+                    totalRai: 21000,
+                    riceRai: 8000,
+                    fieldCropRai: 5000,
+                    orchardRai: 8000,
+                    affectedFarmers: 3800,
+                    estAgriCompensation: 31,
+                    mainCrops: "สวนส้มสายน้ำผึ้ง, พืชไร่",
+                    damageChar: "น้ำหลากแช่ท่วมสวนส้มราบเชิงเขา"
+                }
+            },
+            {
+                id: 157,
+                year: 2559,
+                province: "เชียงใหม่",
+                district: "จอมทอง / ฮอด / แม่วาง",
+                subdistrict: "บ้านหลวง, หางดง, บ้านกาด",
+                region: "NORTH",
+                type: "FLASH",
+                typeName: "น้ำป่าอินทนนท์ & แม่น้ำแจ่มหลาก",
+                isHotspot: true,
+                lat: 18.5300,
+                lng: 98.6800,
+                severity: "MEDIUM",
+                severityText: "ปานกลาง",
+                waterLevel: 1.4,
+                damageVal: 1200,
+                households: 11000,
+                budget: 380,
+                cause: "น้ำป่าจากอุทยานแห่งชาติดอยอินทนนท์ทะลักลงน้ำแม่กลางและแม่น้ำแจ่ม เอ่อล้นท่วมบ้านเรือน อ.จอมทอง อ.ฮอด และ อ.แม่วาง",
+                impact: "สถานที่ท่องเที่ยวแม่น้ำวางและสวนลำไยจอมทองท่วมขัง ประชาชนอพยพสิ่งของขึ้นที่สูง",
+                agencies: ["ปภ.", "อุทยานแห่งชาติดอยอินทนนท์", "อบจ.เชียงใหม่"],
+                agriDamage: {
+                    totalRai: 22000,
+                    riceRai: 9000,
+                    fieldCropRai: 5000,
+                    orchardRai: 8000,
+                    affectedFarmers: 3900,
+                    estAgriCompensation: 32,
+                    mainCrops: "สวนลำไย, แปลงพืชผัก",
+                    damageChar: "น้ำป่าไหลหลากท่วมแปลงเกษตรลุ่มน้ำแจ่ม"
+                }
+            },
+
+            // ==========================================
             // --- จ.ตาก (ครบถ้วนทั้ง 5 เหตุการณ์) ---
             // ==========================================
             {
@@ -770,6 +997,7 @@
                     damageChar: "น้ำแม่น้ำเมยล้นตลิ่งท่วมพื้นที่เกษตรริมแม่น้ำชายแดน"
                 }
             },
+
             // ==========================================
             // --- จ.พระนครศรีอยุธยา (ครบถ้วน 5 เหตุการณ์) ---
             // ==========================================
@@ -2419,38 +2647,6 @@
                     estAgriCompensation: 42,
                     mainCrops: "สวนผลไม้ (กล้วยหอม/มะนาว), ข้าว",
                     damageChar: "น้ำล้นเขื่อนแก่งกระจานระบายลงแม่น้ำ ท่วมแปลงสวนริมน้ำ"
-                }
-            },
-            {
-                id: 141,
-                year: 2558,
-                province: "ตาก",
-                district: "แม่สอด / แม่ระมาด",
-                subdistrict: "แม่สอด, แม่ตาว",
-                region: "WEST",
-                type: "RIVER",
-                typeName: "น้ำเอ่อล้นตลิ่ง (แม่น้ำเมย)",
-                isHotspot: false,
-                lat: 16.7161,
-                lng: 98.5708,
-                severity: "MEDIUM",
-                severityText: "ปานกลาง",
-                waterLevel: 1.3,
-                damageVal: 980,
-                households: 8900,
-                budget: 280,
-                cause: "แม่น้ำเมยชายแดนไทย-เมียนมา เอ่อล้นตลิ่งจากฝนตกหนักในฝั่งเมียนมาและเทือกเขาถนนกักคี",
-                impact: "ตลาดริมเมยและด่านศุลกากรแม่สอดถูกน้ำท่วม สินค้าการค้าชายแดนได้รับความเสียหาย",
-                agencies: ["ปภ.", "ทหารพราน", "องค์กรปกครองส่วนท้องถิ่น"],
-                agriDamage: {
-                    totalRai: 18000,
-                    riceRai: 8000,
-                    fieldCropRai: 8000,
-                    orchardRai: 2000,
-                    affectedFarmers: 2800,
-                    estAgriCompensation: 24,
-                    mainCrops: "ข้าวโพดเลี้ยงสัตว์, พืชผัก, นาข้าว",
-                    damageChar: "น้ำแม่น้ำเมยล้นตลิ่งท่วมพื้นที่เกษตรริมแม่น้ำชายแดน"
                 }
             }
         ];
