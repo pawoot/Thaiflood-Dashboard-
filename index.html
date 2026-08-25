@@ -77,6 +77,15 @@
 
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
+        <!-- Disclaimer Banner -->
+        <section class="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-3.5 flex items-start gap-3 text-amber-200 text-xs shadow-lg">
+            <i class="fa-solid fa-triangle-exclamation text-amber-400 text-base mt-0.5 shrink-0"></i>
+            <div class="leading-relaxed">
+                <strong class="font-bold text-amber-300 block mb-0.5">ข้อจำกัดความรับผิดชอบ (Disclaimer):</strong>
+                ข้อมูลและสถิติที่แสดงในแดชบอร์ดนี้ จัดทำขึ้นเพื่อการศึกษา สรุปบทเรียน และการวิเคราะห์เชิงพื้นที่เบื้องต้นเท่านั้น อาจมีข้อมูลบางส่วนคลาดเคลื่อนหรือตกหล่นตามข้อจำกัดของการรวบรวมข้อมูลเชิงพื้นที่ โปรดตรวจสอบและยืนยันความถูกต้องกับหน่วยงานรับผิดชอบหลักอย่างเป็นทางการ (เช่น กรมป้องกันและบรรเทาสาธารณภัย, สทนช., กรมชลประทาน, กรมส่งเสริมการเกษตร) อีกครั้งก่อนนำไปใช้อ้างอิงทางกฎหมาย ทำรายงานทางการ หรือนำไปประกอบการตัดสินใจเชิงนโยบาย
+            </div>
+        </section>
+
         <!-- Quick Access: Hotspot Provinces Bar -->
         <section class="bg-slate-800/90 border border-rose-500/30 rounded-2xl p-4 shadow-xl">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
@@ -85,25 +94,28 @@
                 </div>
                 <div class="flex flex-wrap gap-2">
                     <button onclick="openProvinceModal('เชียงใหม่')" class="px-3 py-1.5 bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 border border-rose-500/50 rounded-lg text-xs font-bold transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-location-dot text-rose-400"></i> เชียงใหม่ (7 ครั้ง / 179,000 ไร่)
+                        <i class="fa-solid fa-location-dot text-rose-400"></i> เชียงใหม่ (7 ครั้ง)
                     </button>
                     <button onclick="openProvinceModal('อุบลราชธานี')" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/40 rounded-lg text-xs font-medium transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-wheat-awn text-emerald-400"></i> อุบลราชธานี (1.07 ล้านไร่)
-                    </button>
-                    <button onclick="openProvinceModal('สกลนคร')" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/40 rounded-lg text-xs font-medium transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-location-dot"></i> สกลนคร (850,000 ไร่)
-                    </button>
-                    <button onclick="openProvinceModal('พิษณุโลก')" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/40 rounded-lg text-xs font-medium transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-location-dot"></i> พิษณุโลก (452,000 ไร่)
+                        <i class="fa-solid fa-location-dot"></i> อุบลราชธานี (5 ครั้ง)
                     </button>
                     <button onclick="openProvinceModal('พระนครศรีอยุธยา')" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/40 rounded-lg text-xs font-medium transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-location-dot"></i> อยุธยา (265,000 ไร่)
-                    </button>
-                    <button onclick="openProvinceModal('สงขลา')" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/40 rounded-lg text-xs font-medium transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-location-dot"></i> สงขลา / หาดใหญ่ (167,000 ไร่)
+                        <i class="fa-solid fa-location-dot"></i> อยุธยา (5 ครั้ง)
                     </button>
                     <button onclick="openProvinceModal('สุโขทัย')" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/40 rounded-lg text-xs font-medium transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-location-dot"></i> สุโขทัย (333,000 ไร่)
+                        <i class="fa-solid fa-location-dot"></i> สุโขทัย (5 ครั้ง)
+                    </button>
+                    <button onclick="openProvinceModal('สงขลา')" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/40 rounded-lg text-xs font-medium transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-location-dot"></i> สงขลา / หาดใหญ่ (5 ครั้ง)
+                    </button>
+                    <button onclick="openProvinceModal('นครศรีธรรมราช')" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/40 rounded-lg text-xs font-medium transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-location-dot"></i> นครศรีธรรมราช (5 ครั้ง)
+                    </button>
+                    <button onclick="openProvinceModal('พิษณุโลก')" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/40 rounded-lg text-xs font-medium transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-location-dot"></i> พิษณุโลก (4 ครั้ง)
+                    </button>
+                    <button onclick="openProvinceModal('ปราจีนบุรี')" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/40 rounded-lg text-xs font-medium transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-location-dot"></i> ปราจีนบุรี (4 ครั้ง)
                     </button>
                 </div>
             </div>
@@ -129,14 +141,14 @@
                     <select id="filter-year" onchange="applyFilters()" class="w-full bg-slate-900 border border-slate-700 rounded-lg text-xs text-slate-200 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
                         <option value="ALL">ทุกปี (2558 - 2568)</option>
                         <option value="2568">2568 (สงขลา / อยุธยา / นครศรีฯ)</option>
-                        <option value="2567">2567 (เชียงใหม่ 2 ระลอก / เชียงราย / น่าน / พิษณุโลก / สุโขทัย / หนองคาย / สงขลา)</option>
-                        <option value="2566">2566 (เชียงใหม่-นิมมานฯ / นราธิวาส / ปราจีนบุรี / ลำปาง)</option>
-                        <option value="2565">2565 (เชียงใหม่ / อุบลฯ / อยุธยา / พิษณุโลก / กทม.)</option>
-                        <option value="2564">2564 (เชียงใหม่-แม่แจ่ม / สุโขทัย / ชัยภูมิ / โคราช)</option>
-                        <option value="2563">2563 (นครศรีธรรมราช / สุราษฎร์ฯ / ปากช่อง)</option>
-                        <option value="2562">2562 (อุบลฯ / ร้อยเอ็ด / พิษณุโลก-บางระกำ)</option>
+                        <option value="2567">2567 (เชียงใหม่ 2 ระลอก / เชียงราย / สุโขทัย / พิษณุโลก / น่าน / หนองคาย / อุบลฯ / สงขลา / ปราจีนบุรี)</option>
+                        <option value="2566">2566 (เชียงใหม่-นิมมานฯ / อุบลฯ / นราธิวาส / ปราจีนบุรี / ชัยภูมิ / ลำปาง)</option>
+                        <option value="2565">2565 (เชียงใหม่ / อุบลฯ / อยุธยา / พิษณุโลก / นนทบุรี / ขอนแก่น / สุโขทัย / ปราจีนบุรี / สกลนคร / กทม.)</option>
+                        <option value="2564">2564 (เชียงใหม่-แม่แจ่ม / สุโขทัย / ชัยภูมิ / อยุธยา / พิษณุโลก / นครศรีฯ / ปราจีนบุรี / โคราช)</option>
+                        <option value="2563">2563 (นครศรีธรรมราช / สุราษฎร์ฯ / สงขลา / นครราชสีมา-ปากช่อง)</option>
+                        <option value="2562">2562 (อุบลฯ / ร้อยเอ็ด / พิษณุโลก-บางระกำ / สุโขทัย / สกลนคร)</option>
                         <option value="2561">2561 (เชียงใหม่-ฝาง / เพชรบุรี / น่าน / ตราด)</option>
-                        <option value="2560">2560 (สกลนคร / นครสวรรค์ / สุโขทัย / นครศรีฯ)</option>
+                        <option value="2560">2560 (สกลนคร / นครสวรรค์ / สุโขทัย / อยุธยา / นครศรีฯ / สงขลา)</option>
                         <option value="2559">2559 (เชียงใหม่-อินทนนท์ / ระยอง / กทม.)</option>
                         <option value="2558">2558 (ตาก-แม่สอด / พิจิตร-สามง่าม)</option>
                     </select>
