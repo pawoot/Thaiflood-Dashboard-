@@ -128,10 +128,13 @@
        =========================== */
     const CONFIG = {
       SHEET_ID: '1VpMLq2N7xDM-b-UXeZQ0RKQKP__yWVzqQKB_wflSuq8',
-      SHEET_NAME: 'Untitled'
+      SHEET_NAME: 'Untitled',
+      SHEET_GID: '2133828530'
     };
 
-    const REQUIRED_FIELDS = ['Event_ID', 'Year_BE', 'Province', 'District', 'Region_Code', 'Flood_Type', 'Is_Hotspot', 'Severity', 'Max_Water_Level_Meters', 'Estimated_Damage_Million_THB', 'Affected_Households', 'Relief_Budget_Million_THB', 'Root_Cause', 'Agri_Area_Rai', 'MP_Name', 'Political_Party', 'Constituency'];
+    // ลำดับคอลัมน์ในชีตนี้ใช้เป็นตัวสำรองเมื่อ Google Visualization ส่ง label ว่างสำหรับคอลัมน์ตัวเลข
+    const SHEET_COLUMNS = ['Event_ID', 'Year_BE', 'Province', 'District', 'Subdistrict', 'Region_Code', 'Flood_Type_Code', 'Flood_Type', 'Is_Hotspot', 'Latitude', 'Longitude', 'Severity_Code', 'Severity', 'Max_Water_Level_Meters', 'Estimated_Damage_Million_THB', 'Affected_Households', 'Relief_Budget_Million_THB', 'Root_Cause', 'Impact', 'Responsible_Agencies', 'Agri_Area_Rai', 'Rice_Area_Rai', 'Field_Crop_Area_Rai', 'Orchard_Area_Rai', 'Affected_Farmers', 'Agri_Compensation_Million_THB', 'Main_Crops', 'Agri_Damage_Description', 'Source_URL', 'MP_Name', 'Political_Party', 'Constituency'];
+    const REQUIRED_FIELDS = ['Year_BE', 'Province', 'District', 'Region_Code', 'Flood_Type', 'Is_Hotspot', 'Severity', 'Max_Water_Level_Meters', 'Estimated_Damage_Million_THB', 'Affected_Households', 'Relief_Budget_Million_THB', 'Root_Cause', 'Agri_Area_Rai', 'MP_Name', 'Political_Party', 'Constituency'];
     const PAGE_SIZE = 10;
     const state = { data: [], filtered: [], page: 1, sort: { key: 'Year', direction: 'desc' }, charts: {}, compareTargetYear: '', compareBaseYear: '' };
     const $ = (selector) => document.querySelector(selector);
@@ -160,9 +163,10 @@
     function escapeHTML(value) { const div = document.createElement('div'); div.textContent = value ?? ''; return div.innerHTML; }
     // ปรับรูปแบบสี #RGB / #RRGGBB ก่อนเพิ่มความโปร่งใสให้ป้ายชื่อพรรค
     function validColor(color) { const value = String(color || '').trim(); if (/^#[0-9a-f]{3}$/i.test(value)) return '#' + [...value.slice(1)].map(char => char + char).join(''); return /^#[0-9a-f]{6}$/i.test(value) ? value : '#64748b'; }
-    function googleSheetURL() { return `https://docs.google.com/spreadsheets/d/${encodeURIComponent(CONFIG.SHEET_ID)}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(CONFIG.SHEET_NAME)}`; }
+    function googleSheetURL() { return `https://docs.google.com/spreadsheets/d/${encodeURIComponent(CONFIG.SHEET_ID)}/export?format=csv&gid=${encodeURIComponent(CONFIG.SHEET_GID)}`; }
     function googleSheetJSONPURL(callback) { return `https://docs.google.com/spreadsheets/d/${encodeURIComponent(CONFIG.SHEET_ID)}/gviz/tq?sheet=${encodeURIComponent(CONFIG.SHEET_NAME)}&tqx=out:json%3BresponseHandler:${encodeURIComponent(callback)}`; }
-    function rowsFromGViz(response) { const columns = response.table?.cols?.map(column => column.label) || []; return (response.table?.rows || []).map(row => Object.fromEntries(columns.map((column, index) => [column, row.c?.[index]?.v ?? '']))); }
+    function normalizeSheetRows(rows) { return rows.map(row => ({ ...row, Event_ID: row.Event_ID || row['230'] || row.ID || '' })); }
+    function rowsFromGViz(response) { const columns = response.table?.cols?.map(column => column.label) || []; return (response.table?.rows || []).map(row => Object.fromEntries(columns.map((column, index) => [SHEET_COLUMNS[index] || column || `Column_${index + 1}`, row.c?.[index]?.v ?? '']))); }
     // Google Sheets exports do not always include CORS headers for local HTML files.
     // JSONP is a read-only, first-party fallback that preserves dashboard usability in that case.
     function loadViaJSONP() { return new Promise((resolve, reject) => { const callback = `floodSheetResponse_${Date.now()}`; const script = document.createElement('script'); const cleanup = () => { delete window[callback]; script.remove(); }; const timer = setTimeout(() => { cleanup(); reject(new Error('หมดเวลารอการตอบกลับจาก Google Sheets')); }, 15000); window[callback] = response => { clearTimeout(timer); cleanup(); if (response.status !== 'ok') return reject(new Error(response.errors?.[0]?.detailed_message || 'Google Sheets ไม่สามารถส่งข้อมูลได้')); resolve(rowsFromGViz(response)); }; script.onerror = () => { clearTimeout(timer); cleanup(); reject(new Error('ไม่สามารถโหลดข้อมูล Google Sheets ผ่าน JSONP ได้')); }; script.src = googleSheetJSONPURL(callback); document.head.appendChild(script); }); }
@@ -174,6 +178,7 @@
         let rows;
         try { const response = await fetch(googleSheetURL(), { cache: 'no-store' }); if (!response.ok) throw new Error(`Google Sheets ตอบกลับด้วยสถานะ ${response.status}`); rows = parseCSV(await response.text()); }
         catch (fetchError) { rows = await loadViaJSONP(); }
+        rows = normalizeSheetRows(rows);
         if (!rows.length) throw new Error('ชีตที่เลือกไม่มีข้อมูล');
         const missing = REQUIRED_FIELDS.filter(field => !Object.prototype.hasOwnProperty.call(rows[0], field));
         if (missing.length) throw new Error(`ไม่พบคอลัมน์ที่จำเป็น: ${missing.join(', ')}`);
